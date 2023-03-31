@@ -1,11 +1,9 @@
+program Numint(Input, Output, NumInp);
+
 (*-----------------------------------------------------------------------*)
-(*                                                                       *)
 (*                               Numint                                  *)
 (*        Numerical integration of perturbed minor planet orbits         *)
-(*                                                                       *)
 (*-----------------------------------------------------------------------*)
-
-program Numint(Input, Output, NumInp);
 
 {$APPTYPE CONSOLE}
 
@@ -16,7 +14,7 @@ uses
   Apc.PrecNut,
   Apc.Kepler,
   Apc.Sun,
-  Apc.DiffEq,
+  Apc.DE,
   Apc.Planets;
 
   const J2000  = 0.0;
@@ -29,15 +27,15 @@ uses
       L,B,R,LS,BS,RS,Ra,Dec,DELTA,DELTA0 : Double;
       PQR                                : Double33;
       EQX0_TO_J2000, J2000_TO_EQX, ASI   : Double33;
-      Y                                  : DE_EQN_VECTOR;
-      WORK                               : DE_WORKSPACE_RECORD;
+      Y                                  : DE_Eqn_Vector;
+      WORK                               : DE_WorkSpace_Record;
       NumInp                             : TEXT;
 
-(*-----------------------------------------------------------------------*)
-(*                                                                       *)
-(* WriteElm: writes orbital elements                                       *)
-(*                                                                       *)
-(*-----------------------------------------------------------------------*)
+(*-----------------------------------------------------------------------
+
+                WriteElm: writes orbital elements
+
+-----------------------------------------------------------------------*)
 
 procedure WriteElm(YEAR, MONTH: integer; D: Double; A, E, INC, LAN, AOP, M, TEQX: Double);
 begin
@@ -237,7 +235,7 @@ end;
 
 {$F+ compiler directive: force far call}
 
-procedure F(X: Double; Y: DE_EQN_VECTOR; var DYDX: DE_EQN_VECTOR);
+procedure F(X: Double; Y: DE_Eqn_Vector; var DYDX: DE_Eqn_Vector);
 var
   T: Double;
 begin
@@ -265,10 +263,10 @@ end;
 (*   WORK     Work space                                                 *)
 (*                                                                       *)
 (*-----------------------------------------------------------------------*)
-procedure Integrate(var Y: DE_EQN_VECTOR;
+procedure Integrate(var Y: DE_Eqn_Vector;
                     var MJD, MJD_END: Double;
                     var IFLAG: integer;
-                    var WORK: DE_WORKSPACE_RECORD);
+                    var WORK: DE_WorkSpace_Record);
 
 const
   EPS = 1.0E-8; (* Accuracy *)
@@ -396,5 +394,5 @@ begin (* NUMINT *)
     T := T + DT;
 
   until (T2<T);
-
+  Readln;
 end.

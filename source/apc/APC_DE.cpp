@@ -650,7 +650,7 @@ void SolverDE::Integ ( double y[], double& t, double tout,
 
   // On each call set interval of integration and counter for
   // number of steps. Adjust input error tolerances to define
-  // weight vector for subroutine STEP.
+  // weight vector for subroutine Step.
 
   del    = tout - t;
   absdel = fabs(del);

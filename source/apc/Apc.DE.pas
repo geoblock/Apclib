@@ -1,4 +1,4 @@
-unit Apc.DiffEq;
+unit Apc.DE;
 
 (*-----------------------------------------------------------------------*)
 (*                                                                       *)
@@ -20,7 +20,7 @@ unit Apc.DiffEq;
 (*  The following functions and procedures are required to run DE:       *)
 (*                                                                       *)
 (*    Interp           Interpolation routine                             *)
-(*    STEP            Basic integration routine                          *)
+(*    Step            Basic integration routine                          *)
 (*    DE              User called driver routine                         *)
 (*                                                                       *)
 (*  Furthermore, various type and constant definitions are required that *)
@@ -33,19 +33,19 @@ unit Apc.DiffEq;
 (*                                                                       *)
 (*    const DE_EQN = 6;  TWOU = 4.0E-12;  FOURU = 8.0E-12;               *)
 (*                                                                       *)
-(*  The DE_EQN_VECTOR type defines a vector of dimension DE_EQN for      *)
+(*  The DE_Eqn_Vector type defines a vector of dimension DE_EQN for      *)
 (*  state variables, while DE_12_VECTOR, DE_13_VECTOR and DE_PHI_VECTOR  *)
 (*  are array types used to define various auxiliary variables.          *)
-(*  DE_WORKSPACE_RECORD finally defines a record structure used to hold  *)
+(*  DE_WorkSpace_Record finally defines a record structure used to hold  *)
 (*  all data that have to be stored globally between successive calls of *)
 (*  the DE procedure.                                                    *)
 (*                                                                       *)
-(*    type  DE_EQN_VECTOR = array[1..DE_EQN] of Double;                  *)
+(*    type  DE_Eqn_Vector = array[1..DE_EQN] of Double;                  *)
 (*          DE_12_VECTOR  = array[1..12] of Double;                      *)
 (*          DE_13_VECTOR  = array[1..13] of Double;                      *)
 (*          DE_PHI_ARRAY  = array[1..DE_EQN,1..16] of Double;            *)
-(*          DE_WORKSPACE_RECORD = record                                 *)
-(*                            YY,WT,P,YP,YPOUT     :  DE_EQN_VECTOR;     *)
+(*          DE_WorkSpace_Record = record                                 *)
+(*                            YY,WT,P,YP,YPOUT     :  DE_Eqn_Vector;     *)
 (*                            PHI                  :  DE_PHI_ARRAY;      *)
 (*                            ALPHA,BETA,V,W,PSI   :  DE_12_VECTOR;      *)
 (*                            SIG,G                :  DE_13_VECTOR;      *)
@@ -56,11 +56,11 @@ unit Apc.DiffEq;
 (*                                                                       *)
 (*                                                                       *)
 (*  The function to be integrated must be declared as a procedure of     *)
-(*  the form procedure ( var X: Double; var Y,YP: DE_EQN_VECTOR ); and   *)
-(*  the same definition must be used in the procedure header of STEP     *)
+(*  the form procedure ( var X: Double; var Y,YP: DE_Eqn_Vector ); and   *)
+(*  the same definition must be used in the procedure header of Step     *)
 (*  and DE.                                                              *)
 (*                                                                       *)
-(*  Using function EPSMACH the machine accuracy U=EPSMACH can be         *)
+(*  Using function EpsMachine the machine accuracy U=EpsMachine can be         *)
 (*  computed to determine the proper values of constants TWOU and FOURU  *)
 (*  for other compilers or floating point data types.                    *)
 (*                                                                       *)
@@ -69,9 +69,9 @@ unit Apc.DiffEq;
 (*  Delphi uses special data types to pass a function or procedure       *)
 (*  as formal argument of another function or procedure. For this        *)
 (*  purpose the following procedure type is declared and used in the     *)
-(*  specification of STEP and DE:                                        *)
+(*  specification of Step and DE:                                        *)
 (*                                                                       *)
-(*      DE_FUNC = procedure ( X: Double; var Y,YP: DE_EQN_VECTOR );      *)
+(*      DE_Func = procedure ( X: Double; var Y,YP: DE_Eqn_Vector );      *)
 (*                                                                       *)
 (*-----------------------------------------------------------------------*)
 
@@ -81,7 +81,7 @@ uses
   System.Math;
 
 (* --------------------------------------------------------------------- *)
-(* Sample dimensions and type declarations for use with DE,STEP,Interp *)
+(* Sample dimensions and type declarations for use with DE,Step,Interp *)
 (* --------------------------------------------------------------------- *)
 
 const
@@ -90,15 +90,15 @@ const
   FOURU = 8.0E-12; (* u=2**(-39)=1.81E-12 *)
 
 type
-  DE_EQN_VECTOR = array [1 .. DE_EQN] of Double;
-  DE_FUNC = procedure(X: Double; Y: DE_EQN_VECTOR; var YP: DE_EQN_VECTOR);
+  DE_Eqn_Vector = array [1 .. DE_EQN] of Double;
+  DE_Func = procedure(X: Double; Y: DE_Eqn_Vector; var YP: DE_Eqn_Vector);
 
   DE_12_VECTOR = array [1 .. 12] of Double;
   DE_13_VECTOR = array [1 .. 13] of Double;
   DE_PHI_ARRAY = array [1 .. DE_EQN, 1 .. 16] of Double;
 
-  DE_WORKSPACE_RECORD = record
-    YY, WT, P, YP, YPOUT: DE_EQN_VECTOR;
+  DE_WorkSpace_Record = record
+    YY, WT, P, YP, YPOUT: DE_Eqn_Vector;
     PHI: DE_PHI_ARRAY;
     ALPHA, BETA, V, W, PSI: DE_12_VECTOR;
     SIG, G: DE_13_VECTOR;
@@ -112,7 +112,7 @@ type
 (* --------------------------------------------------------------------- *)
 
 (*-----------------------------------------------------------------------*)
-(* STEP                                                                  *)
+(* Step                                                                  *)
 (*                                                                       *)
 (* Basic integration routine for the variable order and stepsize code    *)
 (* of Shampine and Gordon.                                               *)
@@ -128,7 +128,7 @@ type
 (*   HOLD                                                                *)
 (*   K                                                                   *)
 (*   KOLD                                                                *)
-(*   CRASH   True if STEP was aborted (tolerances too small)             *)
+(*   CRASH   True if Step was aborted (tolerances too small)             *)
 (*   PHI                                                                 *)
 (*   P                                                                   *)
 (*   YP                                                                  *)
@@ -145,8 +145,8 @@ type
 (*                                                                       *)
 (* Note:                                                                 *)
 (*                                                                       *)
-(* Replace "F:DE_FUNC;" by                                               *)
-(*   "procedure F(X: double;Y:DE_EQN_VECTOR;var YP:DE_EQN_VECTOR);"         *)
+(* Replace "F:DE_Func;" by                                               *)
+(*   "procedure F(X: double;Y:DE_Eqn_Vector;var YP:DE_Eqn_Vector);"         *)
 (* for use with standard Pascal.                                         *)
 (*                                                                       *)
 (* A detailed description of the method is given in                      *)
@@ -155,18 +155,18 @@ type
 (*    Differential Equations; Freeman and Comp., San Francisco (1975).   *)
 (*                                                                       *)
 (*-----------------------------------------------------------------------*)
-procedure STEP ( var X              :  Double;
-                 var Y              :  DE_EQN_VECTOR;
-                 F                  :  DE_FUNC;
+procedure Step ( var X              :  Double;
+                 var Y              :  DE_Eqn_Vector;
+                 F                  :  DE_Func;
                  var NEQN           :  Integer;
                  var H,EPS          :  Double;
-                 var WT             :  DE_EQN_VECTOR;
+                 var WT             :  DE_Eqn_Vector;
                  var START          :  Boolean;
                  var HOLD           :  Double;
                  var K,KOLD         :  Integer;
                  var CRASH          :  Boolean;
                  var PHI            :  DE_PHI_ARRAY;
-                 var P,YP           :  DE_EQN_VECTOR;
+                 var P,YP           :  DE_Eqn_Vector;
                  var PSI,ALPHA,BETA :  DE_12_VECTOR;
                  var SIG            :  DE_13_VECTOR;
                  var V,W            :  DE_12_VECTOR;
@@ -178,7 +178,7 @@ procedure STEP ( var X              :  Double;
 
 (*-----------------------------------------------------------------------*)
 (*                                                                       *)
-(* Interp: Interpolation routine for use with DE and STEP                 *)
+(* Interp: Interpolation routine for use with DE and Step                 *)
 (*                                                                       *)
 (*   X      Independent variable                                         *)
 (*   Y      Solution at X                                                *)
@@ -190,7 +190,7 @@ procedure STEP ( var X              :  Double;
 (*   PHI    Auxiliary quantity                                           *)
 (*   PSI    Auxiliary quantity                                           *)
 (*                                                                       *)
-(* STEP approximates the solution of the differential equation near X by *)
+(* Step approximates the solution of the differential equation near X by *)
 (* a polynomial, which is evaluated by Interp.                            *)
 (*                                                                       *)
 (* A detailed description of the method is given in                      *)
@@ -199,13 +199,13 @@ procedure STEP ( var X              :  Double;
 (*    Differential Equations; Freeman and Comp., San Francisco (1975).   *)
 (*                                                                       *)
   (* ----------------------------------------------------------------------- *)
-procedure Interp(X: Double; Y: DE_EQN_VECTOR; XOUT: Double; var YOUT, YPOUT: DE_EQN_VECTOR;
+procedure Interp(X: Double; Y: DE_Eqn_Vector; XOUT: Double; var YOUT, YPOUT: DE_Eqn_Vector;
   NEQN, KOLD: Integer; PHI: DE_PHI_ARRAY; PSI: DE_12_VECTOR);
 
-(*-----------------------------------------------------------------------*)
-(* EPSMACH computes the machine accuracy u (1.0+u>1.0,1.0+u/2=1.0)       *)
-(*-----------------------------------------------------------------------*)
-function EPSMACH: Double;
+(*-----------------------------------------------------------------------
+   EpsMachine computes the machine accuracy u (1.0+u>1.0,1.0+u/2=1.0)
+-----------------------------------------------------------------------*)
+function EpsMachine: Double;
 
 (*-----------------------------------------------------------------------*)
 (*                                                                       *)
@@ -229,8 +229,8 @@ function EPSMACH: Double;
 (* Subroutine DE is used for the numerical integration of an ordinary    *)
 (* differential equation y'=f(x,y) of first order, which must be         *)
 (* provided as a subroutine of the form                                  *)
-(*   procedure F ( X: Double; Y: DE_EQN_VECTOR; var YP: DE_EQN_VECTOR );   *)
-(* Aside from DE itself the subroutines STEP and Interp as well as some   *)
+(*   procedure F ( X: Double; Y: DE_Eqn_Vector; var YP: DE_Eqn_Vector );   *)
+(* Aside from DE itself the subroutines Step and Interp as well as some   *)
 (* global constant and type definitions are required, which are          *)
 (* described in detail in DELIB.PAS.                                     *)
 (*                                                                       *)
@@ -271,8 +271,8 @@ function EPSMACH: Double;
 (* The work array WORK is used to store various quantities between       *)
 (* subsequent calls of DE and is not changed by the user.                *)
 (*                                                                       *)
-(* Note that "F:DE_FUNC;" in the specification of DE has to be replaced  *)
-(* by "procedure F(X: double;Y:DE_EQN_VECTOR;var YP:DE_EQN_VECTOR);" for    *)
+(* Note that "F:DE_Func;" in the specification of DE has to be replaced  *)
+(* by "procedure F(X: double;Y:DE_Eqn_Vector;var YP:DE_Eqn_Vector);" for    *)
 (* use with standard Pascal.                                             *)
 (*                                                                       *)
 (* A detailed description of the method and its Fortran implementation   *)
@@ -284,8 +284,8 @@ function EPSMACH: Double;
 (*    package of ODE solvers; Sand79-2374, Sandia Laboratories (1979).   *)
 (*                                                                       *)
 (*-----------------------------------------------------------------------*)
-procedure DE(F: DE_FUNC; NEQN: Integer; var Y: DE_EQN_VECTOR; var T, TOUT: Double;
-  var RELERR, ABSERR: Double; var IFLAG: Integer; var WORK: DE_WORKSPACE_RECORD);
+procedure DE(F: DE_Func; NEQN: Integer; var Y: DE_Eqn_Vector; var T, TOUT: Double;
+  var RELERR, ABSERR: Double; var IFLAG: Integer; var WORK: DE_WorkSpace_Record);
 
 
 //==============================================================
@@ -294,9 +294,9 @@ implementation
 
 (*-----------------------------------------------------------------------*)
 
-procedure STEP(var X: Double; var Y: DE_EQN_VECTOR; F: DE_FUNC; var NEQN: Integer;
-  var H, EPS: Double; var WT: DE_EQN_VECTOR; var START: Boolean; var HOLD: Double;
-  var K, KOLD: Integer; var CRASH: Boolean; var PHI: DE_PHI_ARRAY; var P, YP: DE_EQN_VECTOR;
+procedure Step(var X: Double; var Y: DE_Eqn_Vector; F: DE_Func; var NEQN: Integer;
+  var H, EPS: Double; var WT: DE_Eqn_Vector; var START: Boolean; var HOLD: Double;
+  var K, KOLD: Integer; var CRASH: Boolean; var PHI: DE_PHI_ARRAY; var P, YP: DE_Eqn_Vector;
   var PSI, ALPHA, BETA: DE_12_VECTOR; var SIG: DE_13_VECTOR; var V, W: DE_12_VECTOR;
   var G: DE_13_VECTOR; var PHASE1: Boolean; var NS: Integer; var NORND: Boolean);
 
@@ -338,7 +338,7 @@ var
       MAX := B;
   end;
 
-begin (* STEP *)
+begin (* Step *)
 
   (* explicit initialization of arrays TWO and GSTR *)
 
@@ -428,21 +428,13 @@ begin (* STEP *)
     end;
   end;
 
-  (* *)
   (* End block 0 *)
-  (* *)
-
-  (* *)
   (* Repeat blocks 1, 2 (and 3) until step is successful *)
-  (* *)
 
   repeat
-    (* *)
     (* Begin block 1 *)
-    (* *)
     (* Compute coefficients of formulas for this step. Avoid computing *)
     (* those quantities not changed when step size is not changed. *)
-    (* *)
     KP1 := K + 1;
     KP2 := K + 2;
     KM1 := K - 1;
@@ -480,7 +472,6 @@ begin (* STEP *)
       PSI[K] := TEMP1;
 
       (* Compute coefficients G[*]; initialize V[*] and set W[*]. *)
-
       if (NS > 1) then
       begin
         (* If order was raised, update diagonal part of V[*] *)
@@ -528,17 +519,11 @@ begin (* STEP *)
         end;
     end; (* if K>=NS *)
 
-    (* *)
     (* End block 1 *)
-    (* *)
-
-    (* *)
     (* Begin block 2 *)
-    (* *)
     (* Predict a solution P[*], evaluate derivatives using predicted *)
     (* solution, estimate local error at order K and errors at orders *)
     (* K, K-1, K-2 as if constant step size were used. *)
-    (* *)
 
     // Change PHI to PHI star
     if (K >= NSP1) then
@@ -613,27 +598,19 @@ begin (* STEP *)
       if (ERKM1 <= 0.5 * ERK) then
         KNEW := KM1;
 
-    (* *)
     (* End block 2 *)
-    (* *)
-
-    (* *)
     (* If step is successful continue with block 4, otherwise repeat *)
     (* blocks 1 and 2 after executing block 3 *)
-    (* *)
 
     SUCCESS := (ERR <= EPS);
     if (not SUCCESS) then
     begin
-      (* *)
       (* Begin block 3 *)
-      (* *)
       (* The step is unsuccessful. Restore X, PHI[*,*], PSI[*]. If *)
       (* 3rd consecutive failure, set order to 1. If step fails more *)
       (* than 3 times, consider an optimal step size. Double error *)
       (* tolerance and return if estimated step size is too small *)
       (* for machine precision. *)
-      (* *)
 
       (* Restore X, PHI[*,*] and PSI[*] *)
       PHASE1 := False;
@@ -668,20 +645,15 @@ begin (* STEP *)
         goto 999; (* Exit *)
       end;
 
-      (* *)
       (* End block 3, return to start of block 1 *)
-      (* *)
 
-    end; (* end if(successful) *)
+    end; // end if(successful)
   until (SUCCESS);
 
-  (* *)
   (* Begin block 4 *)
-  (* *)
   (* The step is successful. Correct the predicted solution, evaluate *)
   (* the derivatives using the corrected solution and update the *)
   (* differences. Determine best order and step size for next step. *)
-  (* *)
 
   KOLD := K;
   HOLD := H;
@@ -714,7 +686,6 @@ begin (* STEP *)
   (* - in first phase when always raise order, *)
   (* - already decided to lower order, *)
   (* - step size not constant so estimate unreliable *)
-
   ERKP1 := 0.0;
   if ((KNEW = KM1) or (K = 12)) then
     PHASE1 := False;
@@ -728,7 +699,7 @@ begin (* STEP *)
   else
   begin
     if (KNEW = KM1)
-    then (* lower order *)
+    then // lower order
     begin
       K := KM1;
       ERK := ERKM1;
@@ -750,7 +721,7 @@ begin (* STEP *)
         else
         begin
           if ((ERKP1 < ERK) and (K <> 12)) then
-          (* raise order *)
+          // raise order
           begin
             K := KP1;
             ERK := ERKP1;
@@ -768,8 +739,7 @@ begin (* STEP *)
     end; (* if KP1<=NS *)
 
     (* end if KNEW=KM1 *)
-
-  end; (* if PHASE1 *)
+  end; // if PHASE1
 
   (* With new order determine appropriate step size for next step *)
   if ((PHASE1) or (P5EPS >= ERK * TWO[K + 1])) then
@@ -788,16 +758,14 @@ begin (* STEP *)
   end;
 
   H := HNEW;
-  (* *)
-  (* End block 4 *)
-  (* *)
-
+  // End block 4
 999:
-end; (* STEP *)
+end; // Step
 
 
-(* ----------------------------------------------------------------------- *)
-procedure Interp(X: Double; Y: DE_EQN_VECTOR; XOUT: Double; var YOUT, YPOUT: DE_EQN_VECTOR;
+// -----------------------------------------------------------------------
+
+procedure Interp(X: Double; Y: DE_Eqn_Vector; XOUT: Double; var YOUT, YPOUT: DE_Eqn_Vector;
   NEQN, KOLD: Integer; PHI: DE_PHI_ARRAY; PSI: DE_12_VECTOR);
 var
   I, J, JM1, KI, KIP1, L, LIMIT1: Integer;
@@ -813,7 +781,7 @@ begin
   KI := KOLD + 1;
   KIP1 := KI + 1;
 
-  (* Initialize W[*] for computing G[*] *)
+  // Initialize W[*] for computing G[*]
   for I := 1 to KI do
   begin
     TEMP1 := I;
@@ -821,7 +789,7 @@ begin
   end;
   TERM := 0.0;
 
-  (* compute G[*] *)
+  // compute G[*]
   for J := 2 to KI do
   begin
     JM1 := J - 1;
@@ -858,13 +826,13 @@ begin
 
   for L := 1 to NEQN do
     YOUT[L] := Y[L] + HI * YOUT[L];
-end; (* Interp *)
+end; // Interp
 
 //----------------------------------------------------------------------------
 
-procedure DE(F: DE_FUNC;
-  NEQN: Integer; var Y: DE_EQN_VECTOR; var T, TOUT: Double; var RELERR, ABSERR: Double;
-  var IFLAG: Integer; var WORK: DE_WORKSPACE_RECORD);
+procedure DE(F: DE_Func;
+  NEQN: Integer; var Y: DE_Eqn_Vector; var T, TOUT: Double; var RELERR, ABSERR: Double;
+  var IFLAG: Integer; var WORK: DE_WorkSpace_Record);
 
 label 99; (* Error exit at end of procedure *)
 const
@@ -893,7 +861,7 @@ var
       MIN := B;
   end;
 
-(* MAX: computes the maximum of A and B *)
+  // MAX: computes the maximum of A and B
 
   (*sub*)function MAX(A, B: Double): Double;
   begin
@@ -966,11 +934,10 @@ begin
         T := TOUT;
         TOLD := T;
         ISNOLD := ISN;
-        goto 99; (* Exit *)
+        goto 99; // Exit
       end;
 
-      (* Monitor number of steps attempted *)
-
+      // Monitor number of steps attempted
       if (NOSTEP >= MAXNUM) then
       (* a large amount of work has been expended *)
       begin
@@ -986,12 +953,11 @@ begin
       end;
 
       (* Limit step size, set weight vector and take a step *)
-
       H := SIGN(MIN(abs(H), abs(TEND - X)), H);
       for L := 1 to NEQN do
         WT[L] := RELEPS * abs(YY[L]) + ABSEPS;
 
-      STEP(X, YY, F, NEQN, H, EPS, WT, START, HOLD, K, KOLD, CRASH, PHI, P, YP, PSI, ALPHA, BETA,
+      Step(X, YY, F, NEQN, H, EPS, WT, START, HOLD, K, KOLD, CRASH, PHI, P, YP, PSI, ALPHA, BETA,
         SIG, V, W, G, PHASE1, NS, NORND);
 
       if (CRASH) then (* Tolerances too small *)
@@ -1022,9 +988,9 @@ begin
 99:
 end;
 
-(*-----------------------------------------------------------------------*)
+//-----------------------------------------------------------------------
 
-function EPSMACH: Double;
+function EpsMachine: Double;
 var
   ONE, TWO, U: Double;
 begin
@@ -1034,7 +1000,7 @@ begin
   repeat
     U := U / TWO;
   until ((ONE + U) = ONE);
-  EPSMACH := TWO * U;
+  EpsMachine := TWO * U;
 end;
 
 
