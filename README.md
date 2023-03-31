@@ -1,4 +1,4 @@
-# Apslib
+# Apclib
 Astronomical routines library for Delphi &amp; C++Builder.
 
 
