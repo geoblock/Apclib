@@ -2,7 +2,7 @@ unit Apc.DE;
 
 (*-----------------------------------------------------------------------*)
 (*                                                                       *)
-(* Unit DE:                                                           *)
+(* Unit DE:                                                              *)
 (*                                                                       *)
 (*  Pascal implementation of the variable order variable stepsize        *)
 (*  Adams-Bashforth-Moulton code DE for the numerical integration of     *)
