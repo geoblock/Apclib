@@ -1,9 +1,9 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{C52D69BC-6636-49F7-A532-8D3EA6928B15}</ProjectGuid>
+        <ProjectGuid>{0B3304CD-8269-4584-87B1-2421487F05CF}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Stellario.dproj">
+        <Projects Include="Coco.cbproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -14,23 +14,23 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="Stellario">
-        <MSBuild Projects="Stellario.dproj"/>
+    <Target Name="Coco">
+        <MSBuild Projects="Coco.cbproj"/>
     </Target>
-    <Target Name="Stellario:Clean">
-        <MSBuild Projects="Stellario.dproj" Targets="Clean"/>
+    <Target Name="Coco:Clean">
+        <MSBuild Projects="Coco.cbproj" Targets="Clean"/>
     </Target>
-    <Target Name="Stellario:Make">
-        <MSBuild Projects="Stellario.dproj" Targets="Make"/>
+    <Target Name="Coco:Make">
+        <MSBuild Projects="Coco.cbproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Stellario"/>
+        <CallTarget Targets="Coco"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Stellario:Clean"/>
+        <CallTarget Targets="Coco:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Stellario:Make"/>
+        <CallTarget Targets="Coco:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

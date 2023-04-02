@@ -1,4 +1,4 @@
-unit comets_f;
+unit fOrbdet;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
 
 type
-  TfrmComets = class(TForm)
+  TFormOrbdet = class(TForm)
   private
     { Private declarations }
   public
@@ -15,7 +15,7 @@ type
   end;
 
 var
-  frmComets: TfrmComets;
+  FormOrbdet: TFormOrbdet;
 
 implementation
 

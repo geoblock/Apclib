@@ -41,7 +41,7 @@ function LMST(MJD, LAMBDA: Double): Double;
 (*      Julian calendar is used up to 1582 October 4,                    *)
 (*      Gregorian calendar is used from 1582 October 15 onwards.         *)
 (*-----------------------------------------------------------------------*)
-function MJD(DAY, MONTH, YEAR: integer; HOUR: Double): Double;
+function MJD(Day, Month, Year: integer; Hour: Double): Double;
 
 (*----------------------------------------------------------------------*)
 (* CalDat: Finds the civil calendar date for a given value              *)
@@ -49,7 +49,7 @@ function MJD(DAY, MONTH, YEAR: integer; HOUR: Double): Double;
 (*         Julian calendar is used up to 1582 October 4,                *)
 (*         Gregorian calendar is used from 1582 October 15 onwards.     *)
 (*----------------------------------------------------------------------*)
-procedure CalDat(MJD: Double; var DAY, MONTH, YEAR: integer; var HOUR: Double);
+procedure CalDat(MJD: Double; var Day, Month, Year: integer; var Hour: Double);
 
 //==============================================================
 implementation
@@ -61,7 +61,7 @@ begin
 end;
 
 //----------------------------------------------------------------------
-procedure CalDat(MJD: Double; var DAY, MONTH, YEAR: integer; var HOUR: Double);
+procedure CalDat(MJD: Double; var Day, Month, Year: integer; var Hour: Double);
 var
   B, D, F: integer;
   JD, JD0, C, E: Double;
@@ -83,10 +83,10 @@ begin
   D := Trunc((C - 122.1) / 365.25);
   E := 365.0 * D + Trunc(D / 4);
   F := Trunc((C - E) / 30.6001);
-  DAY := Trunc(C - E + 0.5) - Trunc(30.6001 * F);
-  MONTH := F - 1 - 12 * Trunc(F / 14);
-  YEAR := D - 4715 - Trunc((7 + MONTH) / 10);
-  HOUR := 24.0 * (JD + 0.5 - JD0);
+  Day := Trunc(C - E + 0.5) - Trunc(30.6001 * F);
+  Month := F - 1 - 12 * Trunc(F / 14);
+  Year := D - 4715 - Trunc((7 + Month) / 10);
+  Hour := 24.0 * (JD + 0.5 - JD0);
 end;  // CalDat
 
 //-----------------------------------------------------------------------
@@ -148,23 +148,23 @@ begin
 end;
 
 (* ----------------------------------------------------------------------- *)
-function MJD(DAY, MONTH, YEAR: integer; HOUR: Double): Double;
+function MJD(Day, Month, Year: integer; Hour: Double): Double;
 var
   A: Double;
   B: integer;
 begin
-  A := 10000.0 * YEAR + 100.0 * MONTH + DAY;
-  if (MONTH <= 2) then
+  A := 10000.0 * Year + 100.0 * Month + Day;
+  if (Month <= 2) then
   begin
-    MONTH := MONTH + 12;
-    YEAR := YEAR - 1
+    Month := Month + 12;
+    Year := Year - 1
   end;
   if (A <= 15821004.1) then
-    B := -2 + Trunc((YEAR + 4716) / 4) - 1179
+    B := -2 + Trunc((Year + 4716) / 4) - 1179
   else
-    B := Trunc(YEAR / 400) - Trunc(YEAR / 100) + Trunc(YEAR / 4);
-  A := 365.0 * YEAR - 679004.0;
-  MJD := A + B + Trunc(30.6001 * (MONTH + 1)) + DAY + HOUR / 24.0;
+    B := Trunc(Year / 400) - Trunc(Year / 100) + Trunc(Year / 4);
+  A := 365.0 * Year - 679004.0;
+  MJD := A + B + Trunc(30.6001 * (Month + 1)) + Day + Hour / 24.0;
 end;  // MJD
 
 end.

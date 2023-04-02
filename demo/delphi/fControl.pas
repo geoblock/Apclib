@@ -1,4 +1,4 @@
-unit cocos_f;
+unit fControl;
 
 interface
 
@@ -12,27 +12,26 @@ uses
   Vcl.Controls,
   Vcl.Forms,
   Vcl.Dialogs,
-  Vcl.StdCtrls,
 
   Apc.Mathem,
   Apc.PrecNut,
   Apc.Spheric,
   Apc.Sun,
+  Apc.Kepler,
   Apc.Time;
 
-var
-      X,Y,Z,XS,YS,ZS: Double;
-      T,TEQX,TEQXN  : Double;
-      LS,BS,RS      : Double;
-      A             : Double33;
-      IsEclipt        : Boolean;
-      CharMode          : Char;
 
+var
+  Day, Month, Year, I: integer;
+  D, MODJD, Hour, T, T0, Q, ECC, TEQX0, TEQX, FAC: Double;
+  X, Y, Z, VX, VY, VZ, XS, YS, ZS: Double;
+  L, B, R, LS, BS, RS, Ra, Dec, DELTA, DELTA0: Double;
+  PQR, A, ASI: Double33;
+  dDate: array [1 .. 3] of Double;
+  OrbInp, OrbOut: TEXT;
 
 type
-  TfrmCocos = class(TForm)
-    Edit1: TEdit;
-    Memo1: TMemo;
+  TFormControl = class(TForm)
   private
     { Private declarations }
   public
@@ -40,7 +39,9 @@ type
   end;
 
 var
-  frmCocos: TfrmCocos;
+  FormControl: TFormControl;
+
+
 
 implementation
 

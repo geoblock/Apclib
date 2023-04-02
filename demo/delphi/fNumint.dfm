@@ -1,7 +1,7 @@
-object frmComets: TfrmComets
+object FormNumint: TFormNumint
   Left = 0
   Top = 0
-  Caption = 'Comets'
+  Caption = 'Numint'
   ClientHeight = 433
   ClientWidth = 622
   Color = clBtnFace
@@ -10,5 +10,6 @@ object frmComets: TfrmComets
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poScreenCenter
   TextHeight = 15
 end
