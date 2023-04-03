@@ -15,11 +15,18 @@ uses
   Vcl.Menus,
   Vcl.ExtCtrls,
   Vcl.StdCtrls,
+  Vcl.ComCtrls,
+  Vcl.Imaging.jpeg,
 
   GLS.BaseClasses,
   GLS.Scene,
   GLS.SceneViewer,
-  GLS.Cadencer;
+  GLS.Cadencer,
+  GLS.Objects,
+  GLS.Coordinates,
+  GLS.SimpleNavigation,
+  GLS.VectorFileObjects,
+  GLS.LensFlare, GLS.SkyDome;
 
 type
   TFormObserverD = class(TForm)
@@ -66,10 +73,23 @@ type
     SearchforHelpOn1: TMenuItem;
     HowtoUseHelp1: TMenuItem;
     About1: TMenuItem;
+    PanelRight: TPanel;
+    RadioGroupCoordinates: TRadioGroup;
+    Camera: TGLCamera;
+    LightSourceSun: TGLLightSource;
+    DummyCube: TGLDummyCube;
+    sphPlanet: TGLSphere;
+    GLSimpleNavigation1: TGLSimpleNavigation;
+    RadioGroupForm: TRadioGroup;
+    ffPlanet: TGLFreeForm;
+    RadioGroupPlanet: TRadioGroup;
+    LensFlareSun: TGLLensFlare;
+    SkyDome: TGLSkyDome;
+    procedure FormCreate(Sender: TObject);
+    procedure RadioGroupPlanetClick(Sender: TObject);
   private
-    { Private declarations }
+    DataDir, CurrDir: TFileName;
   public
-    { Public declarations }
   end;
 
 var
@@ -78,5 +98,47 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFormObserverD.FormCreate(Sender: TObject);
+begin
+  DataDir := ExtractFilePath(ParamStr(0));
+  Delete(DataDir,Length(DataDir) - 12, 12);  // only for ..\apps\delphi
+
+  DataDir := DataDir + 'data\';
+  SetCurrentDir(DataDir);
+  // Loadfile Yale_BSC.stars for GLSkyDome
+
+  // Load map for Planet
+  CurrDir := DataDir + 'map\';
+  SetCurrentDir(CurrDir);
+
+  sphPlanet.Material.Texture.Disabled := False;
+  RadioGroupPlanetClick(Self);
+end;
+
+procedure TFormObserverD.RadioGroupPlanetClick(Sender: TObject);
+begin
+  case RadioGroupPlanet.ItemIndex of
+     0: begin
+          sphPlanet.Radius := 2440;
+          sphPlanet.Material.Texture.Image.LoadFromFile('mercury.jpg');
+        end;
+     1: begin
+          sphPlanet.Radius := 6052;
+          sphPlanet.Material.Texture.Image.LoadFromFile('venus.jpg');
+        end;
+     2: begin
+          sphPlanet.Radius := 6371;
+          sphPlanet.Material.Texture.Image.LoadFromFile('earth.jpg');
+        end;
+     3: begin
+          sphPlanet.Radius := 3390;
+          sphPlanet.Material.Texture.Image.LoadFromFile('mars.jpg');
+        end;
+  end;
+
+
+//
+end;
 
 end.

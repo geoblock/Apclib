@@ -14,7 +14,7 @@ object FormCoco: TFormCoco
   TextHeight = 15
   object Memo1: TMemo
     Left = 120
-    Top = 234
+    Top = 134
     Width = 225
     Height = 151
     Lines.Strings = (
@@ -86,6 +86,15 @@ object FormCoco: TFormCoco
         'Equatorial cartesian'
         'Equatorial polar')
       TabOrder = 3
+    end
+    object ButtonCalculate: TButton
+      Left = 48
+      Top = 368
+      Width = 75
+      Height = 25
+      Caption = 'Calculate'
+      TabOrder = 4
+      OnClick = ButtonCalculateClick
     end
   end
 end

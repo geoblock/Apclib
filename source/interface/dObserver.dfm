@@ -2,8 +2,8 @@ object FormObserverD: TFormObserverD
   Left = 0
   Top = 0
   Caption = 'Astro Observer'
-  ClientHeight = 433
-  ClientWidth = 622
+  ClientHeight = 614
+  ClientWidth = 852
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,19 +12,106 @@ object FormObserverD: TFormObserverD
   Font.Style = []
   Menu = MainMenu1
   Position = poScreenCenter
+  OnCreate = FormCreate
   TextHeight = 15
   object GLSceneViewer1: TGLSceneViewer
     Left = 0
     Top = 0
-    Width = 622
-    Height = 433
+    Width = 670
+    Height = 614
+    Camera = Camera
+    Buffer.BackgroundColor = clBlack
+    FieldOfView = 161.499313354492200000
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
   end
+  object PanelRight: TPanel
+    Left = 670
+    Top = 0
+    Width = 182
+    Height = 614
+    Align = alRight
+    TabOrder = 1
+    object RadioGroupCoordinates: TRadioGroup
+      Left = 16
+      Top = 328
+      Width = 145
+      Height = 154
+      Caption = 'Coordinates'
+      ItemIndex = 0
+      Items.Strings = (
+        'Geodetic'
+        'Horizontal'
+        'Equatorial'
+        'Ecliptic'
+        'Galactic'
+        'Supergalactic')
+      TabOrder = 0
+    end
+    object RadioGroupForm: TRadioGroup
+      Left = 16
+      Top = 199
+      Width = 145
+      Height = 113
+      Caption = 'Form'
+      ItemIndex = 0
+      Items.Strings = (
+        'Sphere'
+        'Freeform'
+        'Ellipsoid')
+      TabOrder = 1
+    end
+    object RadioGroupPlanet: TRadioGroup
+      Left = 16
+      Top = 32
+      Width = 145
+      Height = 121
+      Caption = 'Planet'
+      ItemIndex = 2
+      Items.Strings = (
+        'Mercury'
+        'Venus'
+        'Earth'
+        'Mars')
+      TabOrder = 2
+      OnClick = RadioGroupPlanetClick
+    end
+  end
   object GLScene1: TGLScene
     Left = 34
     Top = 34
+    object SkyDome: TGLSkyDome
+      Visible = False
+      Bands = <>
+      Stars = <>
+    end
+    object Camera: TGLCamera
+      DepthOfView = 100000.000000000000000000
+      FocalLength = 50.000000000000000000
+      TargetObject = DummyCube
+      Position.Coordinates = {00401C4600000000000000000000803F}
+      object LightSourceSun: TGLLightSource
+        ConstAttenuation = 1.000000000000000000
+        LightStyle = lsOmni
+        SpotCutOff = 180.000000000000000000
+        object LensFlareSun: TGLLensFlare
+          Seed = 1465
+          FlareIsNotOccluded = True
+        end
+      end
+    end
+    object DummyCube: TGLDummyCube
+      CubeSize = 20000.000000000000000000
+      VisibleAtRunTime = True
+      object sphPlanet: TGLSphere
+        Radius = 6371.000000000000000000
+        Slices = 128
+        Stacks = 128
+      end
+      object ffPlanet: TGLFreeForm
+      end
+    end
   end
   object MainMenu1: TMainMenu
     Left = 224
@@ -156,5 +243,25 @@ object FormObserverD: TFormObserverD
   object GLCadencer1: TGLCadencer
     Left = 128
     Top = 168
+  end
+  object GLSimpleNavigation1: TGLSimpleNavigation
+    Form = Owner
+    GLSceneViewer = GLSceneViewer1
+    FormCaption = 'Astro Observer - %FPS'
+    KeyCombinations = <
+      item
+        ShiftState = [ssLeft, ssRight]
+        Action = snaZoom
+      end
+      item
+        ShiftState = [ssLeft]
+        Action = snaMoveAroundTarget
+      end
+      item
+        ShiftState = [ssRight]
+        Action = snaMoveAroundTarget
+      end>
+    Left = 56
+    Top = 288
   end
 end

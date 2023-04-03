@@ -40,6 +40,8 @@ type
     Edit3: TEdit;
     Edit4: TEdit;
     rgCoords: TRadioGroup;
+    ButtonCalculate: TButton;
+    procedure ButtonCalculateClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -52,5 +54,10 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFormCoco.ButtonCalculateClick(Sender: TObject);
+begin
+  //   Compute Coco
+end;
 
 end.
