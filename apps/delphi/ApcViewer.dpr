@@ -1,8 +1,8 @@
-program Apcobserver;
+program ApcViewer;
 
 uses
   Vcl.Forms,
-  dObserver in '..\..\source\interface\dObserver.pas' {FormObserverD},
+  dViewer in '..\..\source\interface\dViewer.pas' {dFormViewer},
   vsop2013 in '..\..\source\code\vsop2013.pas',
   astronomy in '..\..\source\astronomy\astronomy.pas',
   Apc.DE in '..\..\source\apc\Apc.DE.pas',
@@ -22,7 +22,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TFormObserverD, FormObserverD);
+  Application.CreateForm(TdFormViewer, dFormViewer);
   Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.

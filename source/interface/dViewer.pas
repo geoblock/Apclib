@@ -1,4 +1,4 @@
-unit dObserver;
+unit dViewer;
 
 interface
 
@@ -29,12 +29,12 @@ uses
   GLS.LensFlare, GLS.SkyDome;
 
 type
-  TFormObserverD = class(TForm)
-    GLSceneViewer1: TGLSceneViewer;
-    GLScene1: TGLScene;
-    MainMenu1: TMainMenu;
-    Timer1: TTimer;
-    GLCadencer1: TGLCadencer;
+  TdFormViewer = class(TForm)
+    GLSceneViewer: TGLSceneViewer;
+    GLScene: TGLScene;
+    MainMenu: TMainMenu;
+    Timer: TTimer;
+    GLCadencer: TGLCadencer;
     File1: TMenuItem;
     New1: TMenuItem;
     Open1: TMenuItem;
@@ -79,27 +79,29 @@ type
     LightSourceSun: TGLLightSource;
     DummyCube: TGLDummyCube;
     sphPlanet: TGLSphere;
-    GLSimpleNavigation1: TGLSimpleNavigation;
+    GLSimpleNavigation: TGLSimpleNavigation;
     RadioGroupForm: TRadioGroup;
     ffPlanet: TGLFreeForm;
     RadioGroupPlanet: TRadioGroup;
     LensFlareSun: TGLLensFlare;
     SkyDome: TGLSkyDome;
+    LinesEquator: TGLLines;
     procedure FormCreate(Sender: TObject);
     procedure RadioGroupPlanetClick(Sender: TObject);
+    procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
   private
     DataDir, CurrDir: TFileName;
   public
   end;
 
 var
-  FormObserverD: TFormObserverD;
+  dFormViewer: TdFormViewer;
 
 implementation
 
 {$R *.dfm}
 
-procedure TFormObserverD.FormCreate(Sender: TObject);
+procedure TdFormViewer.FormCreate(Sender: TObject);
 begin
   DataDir := ExtractFilePath(ParamStr(0));
   Delete(DataDir,Length(DataDir) - 12, 12);  // only for ..\apps\delphi
@@ -116,7 +118,12 @@ begin
   RadioGroupPlanetClick(Self);
 end;
 
-procedure TFormObserverD.RadioGroupPlanetClick(Sender: TObject);
+procedure TdFormViewer.GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
+begin
+  sphPlanet.TurnAngle := 10 * NewTime;
+end;
+
+procedure TdFormViewer.RadioGroupPlanetClick(Sender: TObject);
 begin
   case RadioGroupPlanet.ItemIndex of
      0: begin
@@ -136,9 +143,6 @@ begin
           sphPlanet.Material.Texture.Image.LoadFromFile('mars.jpg');
         end;
   end;
-
-
-//
 end;
 
 end.

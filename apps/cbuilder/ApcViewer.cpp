@@ -4,7 +4,7 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("..\..\source\interface\cObserver.cpp", frmObserver);
+USEFORM("..\..\source\interface\cViewer.cpp", cFormViewer);
 USEFORM("..\..\source\interface\cAbout.cpp", frmAbout);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
@@ -13,7 +13,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 	{
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
-		Application->CreateForm(__classid(TfrmObserver), &frmObserver);
+		Application->CreateForm(__classid(TcFormViewer), &cFormViewer);
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->Run();
 	}
