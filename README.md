@@ -19,7 +19,7 @@ as well as modules with routines from www.hnsky.org for working with constellati
 and calculating ephemeris along with IAU SOFA library www.iausofa.org.
 
 For rendering and visualisation GLScene's components 
-form https://github.com/glScene/GLScene are used.
+from https://github.com/glScene/GLScene are used.
 
 ![Apslib_Viewer](https://user-images.githubusercontent.com/28502873/230031261-6ba99c95-f1f9-4715-b3c9-aff4a3aae568.png)
 
