@@ -18,4 +18,7 @@ and calculating ephemeris along with IAU sofa library www.iausofa.org.
 For rendering and visualisation GLScene's components 
 form https://github.com/glScene/GLScene are used.
 
+![Apslib_Viewer](https://user-images.githubusercontent.com/28502873/230029426-a9da6993-c0c7-4663-addf-2925ce006b87.png)
+
+
 Use astronomy.dll with the astronomy.pas for your Delphi/C++Builder applications.
