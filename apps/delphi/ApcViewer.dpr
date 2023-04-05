@@ -15,7 +15,9 @@ uses
   Apc.Spheric in '..\..\source\apc\Apc.Spheric.pas',
   Apc.Sun in '..\..\source\apc\Apc.Sun.pas',
   Apc.Time in '..\..\source\apc\Apc.Time.pas',
-  dAbout in '..\..\source\interface\dAbout.pas' {Form1};
+  dAbout in '..\..\source\interface\dAbout.pas' {Form1},
+  Astap.Constellations in '..\..\source\code\Astap.Constellations.pas',
+  Astap.Ephemerides in '..\..\source\code\Astap.Ephemerides.pas';
 
 {$R *.res}
 

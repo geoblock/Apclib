@@ -121,6 +121,8 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\..\source\code\Astap.Constellations.pas"/>
+        <DCCReference Include="..\..\source\code\Astap.Ephemerides.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

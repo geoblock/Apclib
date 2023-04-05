@@ -1,4 +1,4 @@
-unit vsop2013; // Delphi implementation of theory VSOP2013
+unit vsop2013; 
 
 // This is Delphi port from original Fortran code by FRANCOU & SIMON
 // VSOP original files:
