@@ -17,7 +17,8 @@ uses
   Apc.Time in '..\..\source\apc\Apc.Time.pas',
   dAbout in '..\..\source\interface\dAbout.pas' {Form1},
   Astap.Constellations in '..\..\source\code\Astap.Constellations.pas',
-  Astap.Ephemerides in '..\..\source\code\Astap.Ephemerides.pas';
+  Astap.Ephemerides in '..\..\source\code\Astap.Ephemerides.pas',
+  sofa in '..\..\source\sofa\sofa.pas';
 
 {$R *.res}
 
