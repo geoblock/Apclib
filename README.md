@@ -1,5 +1,5 @@
 # Apclib
-Astronomical routines library for Delphi &amp; C++Builder.
+Astronomical routines library for C++Builder &amp; Delphi 
 
 The original sources based on Fortran/Pascal/C++ codes are described in
   - Shampine, Gordon: "Computer solution of Ordinary Differential Equations",
