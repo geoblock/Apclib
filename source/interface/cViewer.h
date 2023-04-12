@@ -19,6 +19,7 @@
 #include "GLS.SkyDome.hpp"
 #include "GLS.VectorFileObjects.hpp"
 #include <Vcl.Menus.hpp>
+#include <Vcl.ComCtrls.hpp>
 //---------------------------------------------------------------------------
 class TcFormViewer : public TForm
 {
@@ -78,6 +79,10 @@ __published:	// IDE-managed Components
 	TRadioGroup *RadioGroupCoordinates;
 	TRadioGroup *RadioGroupPlanet;
 	TRadioGroup *RadioGroupForm;
+	TPanel *PanelLeft;
+	TTreeView *TreeView;
+	TPanel *PanelTop;
+	TPanel *PanelButton;
 private:	// User declarations
 public:		// User declarations
 	__fastcall TcFormViewer(TComponent* Owner);

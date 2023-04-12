@@ -86,6 +86,10 @@ type
     LensFlareSun: TGLLensFlare;
     SkyDome: TGLSkyDome;
     LinesEquator: TGLLines;
+    PanelLeft: TPanel;
+    TreeView: TTreeView;
+    PanelTop: TPanel;
+    PanelButton: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure RadioGroupPlanetClick(Sender: TObject);
     procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);

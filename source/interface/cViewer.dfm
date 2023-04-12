@@ -2,8 +2,8 @@ object cFormViewer: TcFormViewer
   Left = 0
   Top = 0
   Caption = 'Apc Viewer'
-  ClientHeight = 502
-  ClientWidth = 835
+  ClientHeight = 553
+  ClientWidth = 971
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,24 +14,28 @@ object cFormViewer: TcFormViewer
   Position = poScreenCenter
   TextHeight = 15
   object GLSceneViewer: TGLSceneViewer
-    Left = 0
+    Left = 185
     Top = 0
-    Width = 661
-    Height = 502
+    Width = 612
+    Height = 553
     Camera = Camera
     Buffer.BackgroundColor = clBackground
-    FieldOfView = 157.467941284179700000
+    FieldOfView = 159.499740600585900000
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 478
+    ExplicitHeight = 503
   end
   object Panel1: TPanel
-    Left = 661
+    Left = 797
     Top = 0
     Width = 174
-    Height = 502
+    Height = 553
     Align = alRight
     TabOrder = 1
+    ExplicitLeft = 661
+    ExplicitHeight = 502
     object RadioGroupCoordinates: TRadioGroup
       Left = 16
       Top = 328
@@ -76,6 +80,43 @@ object cFormViewer: TcFormViewer
       TabOrder = 2
     end
   end
+  object PanelLeft: TPanel
+    Left = 0
+    Top = 0
+    Width = 185
+    Height = 553
+    Align = alLeft
+    TabOrder = 2
+    ExplicitTop = -52
+    ExplicitHeight = 554
+    object TreeView: TTreeView
+      Left = 1
+      Top = 42
+      Width = 183
+      Height = 469
+      Align = alClient
+      Indent = 19
+      TabOrder = 0
+      ExplicitHeight = 470
+    end
+    object PanelTop: TPanel
+      Left = 1
+      Top = 1
+      Width = 183
+      Height = 41
+      Align = alTop
+      TabOrder = 1
+    end
+    object PanelButton: TPanel
+      Left = 1
+      Top = 511
+      Width = 183
+      Height = 41
+      Align = alBottom
+      TabOrder = 2
+      ExplicitTop = 512
+    end
+  end
   object GLCadencer: TGLCadencer
     Scene = GLScene
     Left = 160
@@ -98,8 +139,8 @@ object cFormViewer: TcFormViewer
         ShiftState = [ssRight]
         Action = snaMoveAroundTarget
       end>
-    Left = 96
-    Top = 394
+    Left = 120
+    Top = 157
   end
   object MainMenu: TMainMenu
     Left = 280

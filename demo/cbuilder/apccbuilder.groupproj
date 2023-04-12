@@ -3,6 +3,9 @@
         <ProjectGuid>{0B3304CD-8269-4584-87B1-2421487F05CF}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
+        <Projects Include="ApsTree.cbproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Coco.cbproj">
             <Dependencies/>
         </Projects>
@@ -14,6 +17,15 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="ApsTree">
+        <MSBuild Projects="ApsTree.cbproj"/>
+    </Target>
+    <Target Name="ApsTree:Clean">
+        <MSBuild Projects="ApsTree.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ApsTree:Make">
+        <MSBuild Projects="ApsTree.cbproj" Targets="Make"/>
+    </Target>
     <Target Name="Coco">
         <MSBuild Projects="Coco.cbproj"/>
     </Target>
@@ -24,13 +36,13 @@
         <MSBuild Projects="Coco.cbproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Coco"/>
+        <CallTarget Targets="ApsTree;Coco"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Coco:Clean"/>
+        <CallTarget Targets="ApsTree:Clean;Coco:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Coco:Make"/>
+        <CallTarget Targets="ApsTree:Make;Coco:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

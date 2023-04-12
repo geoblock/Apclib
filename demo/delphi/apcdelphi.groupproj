@@ -3,6 +3,9 @@
         <ProjectGuid>{F6183194-0D80-4530-977A-F67C6DBA4906}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
+        <Projects Include="ApcTree.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Coco.dproj">
             <Dependencies/>
         </Projects>
@@ -56,6 +59,15 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="ApcTree">
+        <MSBuild Projects="ApcTree.dproj"/>
+    </Target>
+    <Target Name="ApcTree:Clean">
+        <MSBuild Projects="ApcTree.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ApcTree:Make">
+        <MSBuild Projects="ApcTree.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Coco">
         <MSBuild Projects="Coco.dproj"/>
     </Target>
@@ -192,13 +204,13 @@
         <MSBuild Projects="Sunset.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Coco;Comet;Control;Eclipse;Ecltimer;Foto;Luna;Newmoon;Numint;Occult;Orbdet;Phys;Planetpos;Planetrise;Sunset"/>
+        <CallTarget Targets="ApcTree;Coco;Comet;Control;Eclipse;Ecltimer;Foto;Luna;Newmoon;Numint;Occult;Orbdet;Phys;Planetpos;Planetrise;Sunset"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Coco:Clean;Comet:Clean;Control:Clean;Eclipse:Clean;Ecltimer:Clean;Foto:Clean;Luna:Clean;Newmoon:Clean;Numint:Clean;Occult:Clean;Orbdet:Clean;Phys:Clean;Planetpos:Clean;Planetrise:Clean;Sunset:Clean"/>
+        <CallTarget Targets="ApcTree:Clean;Coco:Clean;Comet:Clean;Control:Clean;Eclipse:Clean;Ecltimer:Clean;Foto:Clean;Luna:Clean;Newmoon:Clean;Numint:Clean;Occult:Clean;Orbdet:Clean;Phys:Clean;Planetpos:Clean;Planetrise:Clean;Sunset:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Coco:Make;Comet:Make;Control:Make;Eclipse:Make;Ecltimer:Make;Foto:Make;Luna:Make;Newmoon:Make;Numint:Make;Occult:Make;Orbdet:Make;Phys:Make;Planetpos:Make;Planetrise:Make;Sunset:Make"/>
+        <CallTarget Targets="ApcTree:Make;Coco:Make;Comet:Make;Control:Make;Eclipse:Make;Ecltimer:Make;Foto:Make;Luna:Make;Newmoon:Make;Numint:Make;Occult:Make;Orbdet:Make;Phys:Make;Planetpos:Make;Planetrise:Make;Sunset:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

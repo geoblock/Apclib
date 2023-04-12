@@ -13,8 +13,8 @@ object FormCoco: TFormCoco
   Position = poScreenCenter
   TextHeight = 15
   object Memo1: TMemo
-    Left = 120
-    Top = 134
+    Left = 176
+    Top = 118
     Width = 225
     Height = 151
     Lines.Strings = (

@@ -2,8 +2,8 @@ object dFormViewer: TdFormViewer
   Left = 0
   Top = 0
   Caption = 'Apc Viewer'
-  ClientHeight = 614
-  ClientWidth = 852
+  ClientHeight = 554
+  ClientWidth = 970
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,22 +15,22 @@ object dFormViewer: TdFormViewer
   OnCreate = FormCreate
   TextHeight = 15
   object GLSceneViewer: TGLSceneViewer
-    Left = 0
+    Left = 185
     Top = 0
-    Width = 670
-    Height = 614
+    Width = 603
+    Height = 554
     Camera = Camera
     Buffer.BackgroundColor = clBlack
-    FieldOfView = 161.499313354492200000
+    FieldOfView = 159.535964965820300000
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
   end
   object PanelRight: TPanel
-    Left = 670
+    Left = 788
     Top = 0
     Width = 182
-    Height = 614
+    Height = 554
     Align = alRight
     TabOrder = 1
     object RadioGroupCoordinates: TRadioGroup
@@ -78,9 +78,42 @@ object dFormViewer: TdFormViewer
       OnClick = RadioGroupPlanetClick
     end
   end
+  object PanelLeft: TPanel
+    Left = 0
+    Top = 0
+    Width = 185
+    Height = 554
+    Align = alLeft
+    TabOrder = 2
+    object TreeView: TTreeView
+      Left = 1
+      Top = 42
+      Width = 183
+      Height = 470
+      Align = alClient
+      Indent = 19
+      TabOrder = 0
+    end
+    object PanelTop: TPanel
+      Left = 1
+      Top = 1
+      Width = 183
+      Height = 41
+      Align = alTop
+      TabOrder = 1
+    end
+    object PanelButton: TPanel
+      Left = 1
+      Top = 512
+      Width = 183
+      Height = 41
+      Align = alBottom
+      TabOrder = 2
+    end
+  end
   object GLScene: TGLScene
-    Left = 34
-    Top = 34
+    Left = 203
+    Top = 67
     object SkyDome: TGLSkyDome
       Visible = False
       Bands = <
@@ -128,8 +161,8 @@ object dFormViewer: TdFormViewer
     end
   end
   object MainMenu: TMainMenu
-    Left = 224
-    Top = 56
+    Left = 416
+    Top = 158
     object File1: TMenuItem
       Caption = '&File'
       object New1: TMenuItem
@@ -251,14 +284,14 @@ object dFormViewer: TdFormViewer
     end
   end
   object Timer: TTimer
-    Left = 48
-    Top = 176
+    Left = 268
+    Top = 244
   end
   object GLCadencer: TGLCadencer
     Scene = GLScene
     OnProgress = GLCadencerProgress
-    Left = 128
-    Top = 168
+    Left = 264
+    Top = 162
   end
   object GLSimpleNavigation: TGLSimpleNavigation
     Form = Owner
@@ -277,7 +310,7 @@ object dFormViewer: TdFormViewer
         ShiftState = [ssRight]
         Action = snaMoveAroundTarget
       end>
-    Left = 56
-    Top = 288
+    Left = 414
+    Top = 80
   end
 end

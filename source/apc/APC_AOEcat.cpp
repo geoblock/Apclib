@@ -56,24 +56,24 @@ int main(int argc, char* argv[])
        << "Asteroid Orbital Elements Database"
        << endl
        << "               (c) 1999 Oliver Montenbruck, Thomas Pfleger" 
-       << endl << endl;
-  
+	   << endl << endl;
+
   // Open input file for reading
-  
-  if (argc>1) 
-    inp.open(argv[1]);
+
+  if (argc>1)
+	inp.open(argv[1]);
   else {
-    inp.open("astorb.dat");
+	inp.open("astorb.dat");
   };
   if (!inp) {
-    cerr << " Abort. Input file not found." << endl;
-    exit(1);
+	cerr << " Abort. Input file not found." << endl;
+	exit(1);
   }
 
   // Query
-   
+
   cout << " Name/number of the minor planet: ";
-  cin.get(Query,19,'\n'); 
+  cin.get(Query,19,'\n');
   cout << endl;
 
   strcpy(query,Query);
@@ -86,11 +86,11 @@ int main(int argc, char* argv[])
 
   // Redirect output if output file shall be created
   if (argc>2) {
-    out.open(argv[2]);
-	if (out.is_open()) cout = out;
+	out.open(argv[2]);
+	if (out.is_open()) cout == out;  // cout = out  -> error
   };
   cout << endl;
-    
+
   // Read all data sets
 
   while (true) {
