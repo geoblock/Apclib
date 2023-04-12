@@ -2,8 +2,8 @@ object dFormViewer: TdFormViewer
   Left = 0
   Top = 0
   Caption = 'Apc Viewer'
-  ClientHeight = 554
-  ClientWidth = 970
+  ClientHeight = 607
+  ClientWidth = 1032
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,25 +17,27 @@ object dFormViewer: TdFormViewer
   object GLSceneViewer: TGLSceneViewer
     Left = 185
     Top = 0
-    Width = 603
-    Height = 554
+    Width = 665
+    Height = 607
     Camera = Camera
     Buffer.BackgroundColor = clBlack
-    FieldOfView = 159.535964965820300000
+    FieldOfView = 161.289718627929700000
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
+    ExplicitLeft = 190
+    ExplicitTop = 1
   end
   object PanelRight: TPanel
-    Left = 788
+    Left = 850
     Top = 0
     Width = 182
-    Height = 554
+    Height = 607
     Align = alRight
     TabOrder = 1
     object RadioGroupCoordinates: TRadioGroup
       Left = 16
-      Top = 328
+      Top = 264
       Width = 145
       Height = 154
       Caption = 'Coordinates'
@@ -51,9 +53,9 @@ object dFormViewer: TdFormViewer
     end
     object RadioGroupForm: TRadioGroup
       Left = 16
-      Top = 199
+      Top = 159
       Width = 145
-      Height = 113
+      Height = 90
       Caption = 'Form'
       ItemIndex = 0
       Items.Strings = (
@@ -64,7 +66,7 @@ object dFormViewer: TdFormViewer
     end
     object RadioGroupPlanet: TRadioGroup
       Left = 16
-      Top = 32
+      Top = 16
       Width = 145
       Height = 121
       Caption = 'Planet'
@@ -77,19 +79,33 @@ object dFormViewer: TdFormViewer
       TabOrder = 2
       OnClick = RadioGroupPlanetClick
     end
+    object rgConstLines: TRadioGroup
+      Left = 16
+      Top = 432
+      Width = 145
+      Height = 97
+      Caption = 'Constellation Lines'
+      ItemIndex = 0
+      Items.Strings = (
+        'None'
+        'Const Lines'
+        'Const Borders')
+      TabOrder = 3
+      OnClick = rgConstLinesClick
+    end
   end
   object PanelLeft: TPanel
     Left = 0
     Top = 0
     Width = 185
-    Height = 554
+    Height = 607
     Align = alLeft
     TabOrder = 2
     object TreeView: TTreeView
       Left = 1
       Top = 42
       Width = 183
-      Height = 470
+      Height = 523
       Align = alClient
       Indent = 19
       TabOrder = 0
@@ -104,7 +120,7 @@ object dFormViewer: TdFormViewer
     end
     object PanelButton: TPanel
       Left = 1
-      Top = 512
+      Top = 565
       Width = 183
       Height = 41
       Align = alBottom
@@ -115,6 +131,7 @@ object dFormViewer: TdFormViewer
     Left = 203
     Top = 67
     object SkyDome: TGLSkyDome
+      Up.Coordinates = {0000803F000000000000000000000000}
       Visible = False
       Bands = <
         item
@@ -127,14 +144,54 @@ object dFormViewer: TdFormViewer
           StopColor.Color = {938C0C3E938C0C3E938E0E3F0000803F}
           Stacks = 4
         end>
-      Stars = <>
+      Stars = <
+        item
+          Color = clBlack
+        end>
+      object ConstLines: TGLLines
+        Direction.Coordinates = {00000000000080BF0000000000000000}
+        Up.Coordinates = {00000000000000000000803F00000000}
+        AntiAliased = True
+        Nodes = <>
+        NodesAspect = lnaInvisible
+        SplineMode = lsmSegments
+        Options = []
+      end
+      object ConstBorders: TGLLines
+        AntiAliased = True
+        Nodes = <>
+        NodesAspect = lnaInvisible
+        SplineMode = lsmSegments
+        Options = []
+      end
+    end
+    object DummyCube: TGLDummyCube
+      Up.Coordinates = {0000803F000000000000008000000000}
+      CubeSize = 1.000000000000000000
+      VisibleAtRunTime = True
+      object LinesEquator: TGLLines
+        Nodes = <>
+        Options = []
+      end
+      object sphPlanet: TGLSphere
+        Direction.Coordinates = {000000000000803F0000000000000000}
+        Up.Coordinates = {00000000000000000000803F00000000}
+        Radius = 6371.000000000000000000
+        Slices = 128
+        Stacks = 128
+      end
+      object ffPlanet: TGLFreeForm
+      end
     end
     object Camera: TGLCamera
       DepthOfView = 100000.000000000000000000
       FocalLength = 50.000000000000000000
       TargetObject = DummyCube
-      Position.Coordinates = {00401C4600000000000000000000803F}
-      object LightSourceSun: TGLLightSource
+      CameraStyle = csInfinitePerspective
+      Position.Coordinates = {00606A4600000000000000000000803F}
+      Direction.Coordinates = {0000803F000000000000008000000000}
+      Up.Coordinates = {00000000000000000000803F00000000}
+      object LightSun: TGLLightSource
         ConstAttenuation = 1.000000000000000000
         LightStyle = lsOmni
         SpotCutOff = 180.000000000000000000
@@ -142,21 +199,6 @@ object dFormViewer: TdFormViewer
           Seed = 1465
           FlareIsNotOccluded = True
         end
-      end
-    end
-    object DummyCube: TGLDummyCube
-      CubeSize = 20000.000000000000000000
-      VisibleAtRunTime = True
-      object LinesEquator: TGLLines
-        Nodes = <>
-        Options = []
-      end
-      object sphPlanet: TGLSphere
-        Radius = 6371.000000000000000000
-        Slices = 128
-        Stacks = 128
-      end
-      object ffPlanet: TGLFreeForm
       end
     end
   end

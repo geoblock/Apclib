@@ -19,6 +19,7 @@ uses
   Vcl.Imaging.jpeg,
 
   GLS.BaseClasses,
+  GLS.VectorGeometry,
   GLS.Scene,
   GLS.SceneViewer,
   GLS.Cadencer,
@@ -26,7 +27,9 @@ uses
   GLS.Coordinates,
   GLS.SimpleNavigation,
   GLS.VectorFileObjects,
-  GLS.LensFlare, GLS.SkyDome;
+  GLS.LensFlare,
+  GLS.SkyDome,
+  GLS.Utils;
 
 type
   TdFormViewer = class(TForm)
@@ -76,7 +79,7 @@ type
     PanelRight: TPanel;
     RadioGroupCoordinates: TRadioGroup;
     Camera: TGLCamera;
-    LightSourceSun: TGLLightSource;
+    LightSun: TGLLightSource;
     DummyCube: TGLDummyCube;
     sphPlanet: TGLSphere;
     GLSimpleNavigation: TGLSimpleNavigation;
@@ -84,47 +87,118 @@ type
     ffPlanet: TGLFreeForm;
     RadioGroupPlanet: TRadioGroup;
     LensFlareSun: TGLLensFlare;
-    SkyDome: TGLSkyDome;
     LinesEquator: TGLLines;
     PanelLeft: TPanel;
     TreeView: TTreeView;
     PanelTop: TPanel;
     PanelButton: TPanel;
+    SkyDome: TGLSkyDome;
+    ConstLines: TGLLines;
+    ConstBorders: TGLLines;
+    rgConstLines: TRadioGroup;
     procedure FormCreate(Sender: TObject);
     procedure RadioGroupPlanetClick(Sender: TObject);
     procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
+    procedure rgConstLinesClick(Sender: TObject);
   private
     DataDir, CurrDir: TFileName;
+    procedure LoadConstLines(const aDataPath: TFileName);
+    procedure LoadConstBorders(const aDataPath: TFileName);
   public
+    ConstellationsAlpha: Single;
+    TimeMultiplier: Single;
   end;
 
 var
   dFormViewer: TdFormViewer;
 
+//---------------------------------------------
 implementation
+//---------------------------------------------
 
 {$R *.dfm}
+
+function LonLatToPos(Lon, Lat: Single): TAffineVector;
+var
+  F: Single;
+begin
+  SinCosine(Lat * (PI / 180), Result.Y, F);
+  SinCosine(Lon * (360 / 24 * PI / 180), F, Result.X, Result.Z);
+end;
+
+procedure TdFormViewer.LoadConstLines(const aDataPath: TFileName);
+var
+  sl, line: TStrings;
+  pos1, pos2: TAffineVector;
+  i: Integer;
+
+begin
+  sl := TStringList.CReate;
+  line := TStringList.CReate;
+  sl.LoadFromFile(aDataPath + 'ConstLines.dat');
+  for i := 0 to sl.Count - 1 do
+  begin
+    line.CommaText := sl[i];
+    pos1 := LonLatToPos(StrToFloatDef(line[0]), StrToFloatDef(line[1]));
+    ConstLines.AddNode(pos1);
+    pos2 := LonLatToPos(StrToFloatDef(line[2]), StrToFloatDef(line[3]));
+    ConstLines.AddNode(pos2);
+  end;
+  sl.Free;
+  line.Free;
+end;
+
+procedure TdFormViewer.LoadConstBorders(const aDataPath: TFileName);
+var
+  sl, line: TStrings;
+  pos1, pos2: TAffineVector;
+  i: Integer;
+
+begin
+  sl := TStringList.CReate;
+  line := TStringList.CReate;
+  sl.LoadFromFile(aDataPath + 'ConstBorders.dat');
+  for i := 0 to sl.Count - 1 do
+  begin
+    line.CommaText := sl[i];
+    pos1 := LonLatToPos(StrToFloatDef(line[0]), StrToFloatDef(line[1]));
+    ConstBorders.AddNode(pos1);
+    pos2 := LonLatToPos(StrToFloatDef(line[2]), StrToFloatDef(line[3]));
+    ConstBorders.AddNode(pos2);
+  end;
+  sl.Free;
+  line.Free;
+end;
+
+
+//--------------------------------------------------------------------
 
 procedure TdFormViewer.FormCreate(Sender: TObject);
 begin
   DataDir := ExtractFilePath(ParamStr(0));
-  Delete(DataDir,Length(DataDir) - 12, 12);  // only for ..\apps\delphi
-
   DataDir := DataDir + 'data\';
   SetCurrentDir(DataDir);
+
   // Loadfile Yale_BSC.stars for GLSkyDome
+  SkyDome.Visible := True;
+  SkyDome.Bands.Clear;
+
+  CurrDir := DataDir + 'catalog\';
+  SetCurrentDir(CurrDir);
+  SkyDome.Stars.LoadStarsFile('hipparcos.stars');
 
   // Load map for Planet
   CurrDir := DataDir + 'map\';
   SetCurrentDir(CurrDir);
-
   sphPlanet.Material.Texture.Disabled := False;
   RadioGroupPlanetClick(Self);
+
+  rgConstLinesClick(Self);
 end;
 
 procedure TdFormViewer.GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
 begin
-  sphPlanet.TurnAngle := 10 * NewTime;
+  //sphPlanet.TurnAngle := 10 * NewTime;
 end;
 
 procedure TdFormViewer.RadioGroupPlanetClick(Sender: TObject);
@@ -146,6 +220,24 @@ begin
           sphPlanet.Radius := 3390;
           sphPlanet.Material.Texture.Image.LoadFromFile('mars.jpg');
         end;
+  end;
+end;
+
+procedure TdFormViewer.rgConstLinesClick(Sender: TObject);
+begin
+  CurrDir := DataDir + 'constellation\';
+  ConstLines.Nodes.Clear;
+  ConstBorders.Nodes.Clear;
+  case rgConstLines.ItemIndex of
+    0: begin
+         SkyDome.Bands.Clear;
+       end;
+    1: begin
+         LoadConstLines(CurrDir);
+       end;
+    2: begin
+         LoadConstBorders(CurrDir);
+       end;
   end;
 end;
 
