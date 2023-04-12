@@ -3,10 +3,10 @@
         <ProjectGuid>{128E746D-D532-4FCE-86E9-E602627EE969}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="apps\delphi\ApsViewer.dproj">
+        <Projects Include="ApsViewer.dproj">
             <Dependencies>source\sofa\sofa_win32.cbproj</Dependencies>
         </Projects>
-        <Projects Include="apps\cbuilder\ApcViewer.cbproj">
+        <Projects Include="ApcViewer.cbproj">
             <Dependencies>source\sofa\sofa_win64.cbproj</Dependencies>
         </Projects>
         <Projects Include="source\sofa\sofa_win32.cbproj">
@@ -24,22 +24,22 @@
         </BorlandProject>
     </ProjectExtensions>
     <Target Name="ApsViewer" DependsOnTargets="sofa_win32">
-        <MSBuild Projects="apps\delphi\ApsViewer.dproj"/>
+        <MSBuild Projects="ApsViewer.dproj"/>
     </Target>
     <Target Name="ApsViewer:Clean" DependsOnTargets="sofa_win32:Clean">
-        <MSBuild Projects="apps\delphi\ApsViewer.dproj" Targets="Clean"/>
+        <MSBuild Projects="ApsViewer.dproj" Targets="Clean"/>
     </Target>
     <Target Name="ApsViewer:Make" DependsOnTargets="sofa_win32:Make">
-        <MSBuild Projects="apps\delphi\ApsViewer.dproj" Targets="Make"/>
+        <MSBuild Projects="ApsViewer.dproj" Targets="Make"/>
     </Target>
     <Target Name="ApcViewer" DependsOnTargets="sofa_win64">
-        <MSBuild Projects="apps\cbuilder\ApcViewer.cbproj"/>
+        <MSBuild Projects="ApcViewer.cbproj"/>
     </Target>
     <Target Name="ApcViewer:Clean" DependsOnTargets="sofa_win64:Clean">
-        <MSBuild Projects="apps\cbuilder\ApcViewer.cbproj" Targets="Clean"/>
+        <MSBuild Projects="ApcViewer.cbproj" Targets="Clean"/>
     </Target>
     <Target Name="ApcViewer:Make" DependsOnTargets="sofa_win64:Make">
-        <MSBuild Projects="apps\cbuilder\ApcViewer.cbproj" Targets="Make"/>
+        <MSBuild Projects="ApcViewer.cbproj" Targets="Make"/>
     </Target>
     <Target Name="sofa_win32">
         <MSBuild Projects="source\sofa\sofa_win32.cbproj"/>
