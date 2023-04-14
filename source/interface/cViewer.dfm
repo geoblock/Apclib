@@ -1,7 +1,7 @@
-object cFormViewer: TcFormViewer
+object FormViewerC: TFormViewerC
   Left = 0
   Top = 0
-  Caption = 'Apc Viewer'
+  Caption = 'Apc Viewer C'
   ClientHeight = 553
   ClientWidth = 971
   Color = clBtnFace
@@ -24,8 +24,6 @@ object cFormViewer: TcFormViewer
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 478
-    ExplicitHeight = 503
   end
   object Panel1: TPanel
     Left = 797
@@ -34,8 +32,6 @@ object cFormViewer: TcFormViewer
     Height = 553
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 661
-    ExplicitHeight = 502
     object RadioGroupCoordinates: TRadioGroup
       Left = 16
       Top = 328
@@ -87,8 +83,6 @@ object cFormViewer: TcFormViewer
     Height = 553
     Align = alLeft
     TabOrder = 2
-    ExplicitTop = -52
-    ExplicitHeight = 554
     object TreeView: TTreeView
       Left = 1
       Top = 42
@@ -97,7 +91,6 @@ object cFormViewer: TcFormViewer
       Align = alClient
       Indent = 19
       TabOrder = 0
-      ExplicitHeight = 470
     end
     object PanelTop: TPanel
       Left = 1
@@ -114,7 +107,6 @@ object cFormViewer: TcFormViewer
       Height = 41
       Align = alBottom
       TabOrder = 2
-      ExplicitTop = 512
     end
   end
   object GLCadencer: TGLCadencer

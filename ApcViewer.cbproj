@@ -161,7 +161,7 @@
             <BuildOrder>2</BuildOrder>
         </CppCompile>
         <CppCompile Include="source\interface\cViewer.cpp">
-            <Form>cFormViewer</Form>
+            <Form>FormViewerC</Form>
             <FormType>dfm</FormType>
             <DependentOn>source\interface\cViewer.h</DependentOn>
             <BuildOrder>2</BuildOrder>

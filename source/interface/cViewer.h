@@ -21,7 +21,7 @@
 #include <Vcl.Menus.hpp>
 #include <Vcl.ComCtrls.hpp>
 //---------------------------------------------------------------------------
-class TcFormViewer : public TForm
+class TFormViewerC : public TForm
 {
 __published:	// IDE-managed Components
 	TGLSceneViewer *GLSceneViewer;
@@ -85,9 +85,9 @@ __published:	// IDE-managed Components
 	TPanel *PanelButton;
 private:	// User declarations
 public:		// User declarations
-	__fastcall TcFormViewer(TComponent* Owner);
+	__fastcall TFormViewerC(TComponent* Owner);
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TcFormViewer *cFormViewer;
+extern PACKAGE TFormViewerC *FormViewerC;
 //---------------------------------------------------------------------------
 #endif

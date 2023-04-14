@@ -17,9 +17,9 @@
 #pragma link "GLS.SkyDome"
 #pragma link "GLS.VectorFileObjects"
 #pragma resource "*.dfm"
-TcFormViewer *cFormViewer;
+TFormViewerC *FormViewerC;
 //---------------------------------------------------------------------------
-__fastcall TcFormViewer::TcFormViewer(TComponent* Owner)
+__fastcall TFormViewerC::TFormViewerC(TComponent* Owner)
 	: TForm(Owner)
 {
 }

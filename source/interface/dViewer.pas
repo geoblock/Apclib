@@ -100,6 +100,7 @@ type
     procedure RadioGroupPlanetClick(Sender: TObject);
     procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
     procedure rgConstLinesClick(Sender: TObject);
+    procedure Exit1Click(Sender: TObject);
   private
     DataDir, CurrDir: TFileName;
     procedure LoadConstLines(const aDataPath: TFileName);
@@ -112,19 +113,23 @@ type
 var
   dFormViewer: TdFormViewer;
 
-//---------------------------------------------
+//------------------------------------------------------------------
 implementation
-//---------------------------------------------
+//------------------------------------------------------------------
 
 {$R *.dfm}
+
+//------------------------------------------------------------------
 
 function LonLatToPos(Lon, Lat: Single): TAffineVector;
 var
   F: Single;
 begin
   SinCosine(Lat * (PI / 180), Result.Y, F);
-  SinCosine(Lon * (360 / 24 * PI / 180), F, Result.X, Result.Z);
+  SinCosine(Lon * (360 / 24 * PI / 180), F, Result.Z, Result.X);
 end;
+
+//------------------------------------------------------------------
 
 procedure TdFormViewer.LoadConstLines(const aDataPath: TFileName);
 var
@@ -148,10 +153,13 @@ begin
   line.Free;
 end;
 
+
+//------------------------------------------------------------------
+
 procedure TdFormViewer.LoadConstBorders(const aDataPath: TFileName);
 var
   sl, line: TStrings;
-  pos1, pos2: TAffineVector;
+  skypos: TAffineVector;
   i: Integer;
 
 begin
@@ -161,10 +169,8 @@ begin
   for i := 0 to sl.Count - 1 do
   begin
     line.CommaText := sl[i];
-    pos1 := LonLatToPos(StrToFloatDef(line[0]), StrToFloatDef(line[1]));
-    ConstBorders.AddNode(pos1);
-    pos2 := LonLatToPos(StrToFloatDef(line[2]), StrToFloatDef(line[3]));
-    ConstBorders.AddNode(pos2);
+    skypos := LonLatToPos(StrToFloatDef(line[0]), StrToFloatDef(line[1]));
+    ConstBorders.AddNode(skypos);
   end;
   sl.Free;
   line.Free;
@@ -173,7 +179,14 @@ end;
 
 //--------------------------------------------------------------------
 
+procedure TdFormViewer.Exit1Click(Sender: TObject);
+begin
+  Exit;
+end;
+
 procedure TdFormViewer.FormCreate(Sender: TObject);
+var
+  FileName: TFileName;
 begin
   DataDir := ExtractFilePath(ParamStr(0));
   DataDir := DataDir + 'data\';
@@ -185,7 +198,9 @@ begin
 
   CurrDir := DataDir + 'catalog\';
   SetCurrentDir(CurrDir);
-  SkyDome.Stars.LoadStarsFile('hipparcos.stars');
+  FileName := 'hipparcos_9.stars';
+  if FileExists(FileName) then
+    SkyDome.Stars.LoadStarsFile(FileName);
 
   // Load map for Planet
   CurrDir := DataDir + 'map\';
@@ -196,10 +211,15 @@ begin
   rgConstLinesClick(Self);
 end;
 
-procedure TdFormViewer.GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
+//------------------------------------------------------------------
+
+procedure TdFormViewer.GLCadencerProgress(Sender: TObject;
+  const DeltaTime, NewTime: Double);
 begin
   //sphPlanet.TurnAngle := 10 * NewTime;
 end;
+
+//------------------------------------------------------------------
 
 procedure TdFormViewer.RadioGroupPlanetClick(Sender: TObject);
 begin
@@ -222,6 +242,8 @@ begin
         end;
   end;
 end;
+
+//------------------------------------------------------------------
 
 procedure TdFormViewer.rgConstLinesClick(Sender: TObject);
 begin

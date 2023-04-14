@@ -25,8 +25,6 @@ object dFormViewer: TdFormViewer
     PenAsTouch = False
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 190
-    ExplicitTop = 1
   end
   object PanelRight: TPanel
     Left = 850
@@ -161,7 +159,6 @@ object dFormViewer: TdFormViewer
         AntiAliased = True
         Nodes = <>
         NodesAspect = lnaInvisible
-        SplineMode = lsmSegments
         Options = []
       end
     end
@@ -234,6 +231,7 @@ object dFormViewer: TdFormViewer
       end
       object Exit1: TMenuItem
         Caption = 'E&xit'
+        OnClick = Exit1Click
       end
     end
     object Edit1: TMenuItem
