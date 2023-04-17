@@ -1,25 +1,29 @@
 //---------------------------------------------------------------------------
 
-#ifndef cViewerH
-#define cViewerH
+#ifndef cMainViewerH
+#define cMainViewerH
 //---------------------------------------------------------------------------
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Menus.hpp>
+#include <Vcl.ComCtrls.hpp>
+
 #include "GLS.BaseClasses.hpp"
 #include "GLS.Cadencer.hpp"
 #include "GLS.Scene.hpp"
 #include "GLS.SceneViewer.hpp"
 #include "GLS.SimpleNavigation.hpp"
-#include <Vcl.ExtCtrls.hpp>
 #include "GLS.Coordinates.hpp"
 #include "GLS.LensFlare.hpp"
 #include "GLS.Objects.hpp"
 #include "GLS.SkyDome.hpp"
 #include "GLS.VectorFileObjects.hpp"
-#include <Vcl.Menus.hpp>
-#include <Vcl.ComCtrls.hpp>
+#include "GLS.GeomObjects.hpp"
+
+
 //---------------------------------------------------------------------------
 class TFormViewerC : public TForm
 {
@@ -34,14 +38,10 @@ __published:	// IDE-managed Components
 	TMenuItem *Open1;
 	TMenuItem *Save1;
 	TMenuItem *SaveAs1;
-	TMenuItem *N2;
-	TMenuItem *Print1;
-	TMenuItem *PrintSetup1;
 	TMenuItem *N1;
-	TMenuItem *Exit1;
+	TMenuItem *miExit;
 	TMenuItem *Edit1;
 	TMenuItem *Undo1;
-	TMenuItem *Repeat1;
 	TMenuItem *N5;
 	TMenuItem *Cut1;
 	TMenuItem *Copy1;
@@ -55,35 +55,43 @@ __published:	// IDE-managed Components
 	TMenuItem *Links1;
 	TMenuItem *Object1;
 	TMenuItem *Window1;
-	TMenuItem *NewWindow1;
-	TMenuItem *Tile1;
-	TMenuItem *Cascade1;
-	TMenuItem *ArrangeAll1;
+	TMenuItem *miPointto;
 	TMenuItem *N6;
 	TMenuItem *Hide1;
 	TMenuItem *Show1;
 	TMenuItem *Help1;
 	TMenuItem *Contents1;
 	TMenuItem *SearchforHelpOn1;
-	TMenuItem *HowtoUseHelp1;
-	TMenuItem *About1;
+	TMenuItem *miAbout;
 	TGLScene *GLScene;
 	TGLSkyDome *SkyDome;
 	TGLCamera *Camera;
 	TGLLightSource *LightSourceSun;
 	TGLLensFlare *LensFlareSun;
 	TGLDummyCube *DummyCube;
-	TGLSphere *sphPlanet;
+	TGLSphere *sfPlanet;
 	TGLFreeForm *ffPlanet;
 	TTimer *Timer;
 	TRadioGroup *RadioGroupCoordinates;
-	TRadioGroup *RadioGroupPlanet;
-	TRadioGroup *RadioGroupForm;
 	TPanel *PanelLeft;
 	TTreeView *TreeView;
 	TPanel *PanelTop;
 	TPanel *PanelButton;
+	TMenuItem *N7;
+	TRadioGroup *RadioGroupPlanet;
+	TGLTorus *TorusMeridian;
+	TGLTorus *TorusEquator;
+	TGLCamera *CameraController;
+	void __fastcall miAboutClick(TObject *Sender);
+	void __fastcall miExitClick(TObject *Sender);
+	void __fastcall miPointtoClick(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall RadioGroupPlanetClick(TObject *Sender);
+	void __fastcall GLCadencerProgress(TObject *Sender, const double DeltaTime, const double NewTime);
 private:	// User declarations
+	TFileName DataDir;
+	TFileName CurrDir;
+	TFileName FileName;
 public:		// User declarations
 	__fastcall TFormViewerC(TComponent* Owner);
 };

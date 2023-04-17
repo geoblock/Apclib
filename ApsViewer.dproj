@@ -102,7 +102,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="source\interface\dViewer.pas">
+        <DCCReference Include="source\interface\dMainViewer.pas">
             <Form>dFormViewer</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -119,12 +119,20 @@
         <DCCReference Include="source\apc\Apc.Sun.pas"/>
         <DCCReference Include="source\apc\Apc.Time.pas"/>
         <DCCReference Include="source\interface\dAbout.pas">
-            <Form>Form1</Form>
+            <Form>FormAbout</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="source\code\Astap.Constellations.pas"/>
         <DCCReference Include="source\code\Astap.Ephemerides.pas"/>
         <DCCReference Include="source\sofa\sofa.pas"/>
+        <DCCReference Include="source\interface\dCoords.pas">
+            <Form>FormCoords</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="source\interface\dPointto.pas">
+            <Form>FormPointto</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -147,7 +155,6 @@
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GBComps.bpl">Geoblock - Components</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GR32_DT.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GR32_DT.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIO.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIO.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIODB.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIODB.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>

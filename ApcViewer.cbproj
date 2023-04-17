@@ -160,10 +160,10 @@
             <DependentOn>source\interface\cAbout.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
-        <CppCompile Include="source\interface\cViewer.cpp">
+        <CppCompile Include="source\interface\cMainViewer.cpp">
             <Form>FormViewerC</Form>
             <FormType>dfm</FormType>
-            <DependentOn>source\interface\cViewer.h</DependentOn>
+            <DependentOn>source\interface\cMainViewer.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
         <None Include="source\sofa\sofa.h">
@@ -172,7 +172,7 @@
         <None Include="source\sofa\sofam.h">
             <BuildOrder>4</BuildOrder>
         </None>
-        <FormResources Include="source\interface\cViewer.dfm"/>
+        <FormResources Include="source\interface\cMainViewer.dfm"/>
         <FormResources Include="source\interface\cAbout.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -202,7 +202,6 @@
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GBComps.bpl">Geoblock - Components</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GR32_DT.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GR32_DT.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIO.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIO.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIODB.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GEdgeIODB.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>

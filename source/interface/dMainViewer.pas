@@ -1,4 +1,4 @@
-unit dViewer;
+unit dMainViewer;
 
 interface
 
@@ -29,7 +29,12 @@ uses
   GLS.VectorFileObjects,
   GLS.LensFlare,
   GLS.SkyDome,
-  GLS.Utils;
+  GLS.Utils,
+  GLS.GeomObjects,
+
+  dAbout,
+  dCoords,
+  dPointto;
 
 type
   TdFormViewer = class(TForm)
@@ -43,14 +48,10 @@ type
     Open1: TMenuItem;
     Save1: TMenuItem;
     SaveAs1: TMenuItem;
-    Print1: TMenuItem;
-    PrintSetup1: TMenuItem;
     Exit1: TMenuItem;
-    N1: TMenuItem;
     N2: TMenuItem;
     Edit1: TMenuItem;
     Undo1: TMenuItem;
-    Repeat1: TMenuItem;
     Cut1: TMenuItem;
     Copy1: TMenuItem;
     Paste1: TMenuItem;
@@ -63,10 +64,8 @@ type
     N3: TMenuItem;
     N4: TMenuItem;
     N5: TMenuItem;
-    Window1: TMenuItem;
-    NewWindow1: TMenuItem;
-    Tile1: TMenuItem;
-    Cascade1: TMenuItem;
+    miTools: TMenuItem;
+    miOptions: TMenuItem;
     ArrangeAll1: TMenuItem;
     Hide1: TMenuItem;
     Show1: TMenuItem;
@@ -74,20 +73,18 @@ type
     Help1: TMenuItem;
     Contents1: TMenuItem;
     SearchforHelpOn1: TMenuItem;
-    HowtoUseHelp1: TMenuItem;
     About1: TMenuItem;
     PanelRight: TPanel;
     RadioGroupCoordinates: TRadioGroup;
     Camera: TGLCamera;
     LightSun: TGLLightSource;
     DummyCube: TGLDummyCube;
-    sphPlanet: TGLSphere;
+    sfPlanet: TGLSphere;
     GLSimpleNavigation: TGLSimpleNavigation;
-    RadioGroupForm: TRadioGroup;
     ffPlanet: TGLFreeForm;
     RadioGroupPlanet: TRadioGroup;
     LensFlareSun: TGLLensFlare;
-    LinesEquator: TGLLines;
+    GridLines: TGLLines;
     PanelLeft: TPanel;
     TreeView: TTreeView;
     PanelTop: TPanel;
@@ -96,13 +93,27 @@ type
     ConstLines: TGLLines;
     ConstBorders: TGLLines;
     rgConstLines: TRadioGroup;
+    TorusEquator: TGLTorus;
+    TorusMeridian: TGLTorus;
+    DiskEcliptic: TGLDisk;
+    StatusBar: TStatusBar;
+    TorusEcliptic: TGLTorus;
+    N7: TMenuItem;
+    Window1: TMenuItem;
+    miPointto: TMenuItem;
+    miCoordinates: TMenuItem;
+    CameraController: TGLCamera;
     procedure FormCreate(Sender: TObject);
     procedure RadioGroupPlanetClick(Sender: TObject);
     procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
     procedure rgConstLinesClick(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
+    procedure miCoordinatesClick(Sender: TObject);
+    procedure About1Click(Sender: TObject);
+    procedure miPointtoClick(Sender: TObject);
   private
     DataDir, CurrDir: TFileName;
+    FileName: TFileName;
     procedure LoadConstLines(const aDataPath: TFileName);
     procedure LoadConstBorders(const aDataPath: TFileName);
   public
@@ -118,16 +129,6 @@ implementation
 //------------------------------------------------------------------
 
 {$R *.dfm}
-
-//------------------------------------------------------------------
-
-function LonLatToPos(Lon, Lat: Single): TAffineVector;
-var
-  F: Single;
-begin
-  SinCosine(Lat * (PI / 180), Result.Y, F);
-  SinCosine(Lon * (360 / 24 * PI / 180), F, Result.Z, Result.X);
-end;
 
 //------------------------------------------------------------------
 
@@ -179,14 +180,7 @@ end;
 
 //--------------------------------------------------------------------
 
-procedure TdFormViewer.Exit1Click(Sender: TObject);
-begin
-  Exit;
-end;
-
 procedure TdFormViewer.FormCreate(Sender: TObject);
-var
-  FileName: TFileName;
 begin
   DataDir := ExtractFilePath(ParamStr(0));
   DataDir := DataDir + 'data\';
@@ -205,7 +199,7 @@ begin
   // Load map for Planet
   CurrDir := DataDir + 'map\';
   SetCurrentDir(CurrDir);
-  sphPlanet.Material.Texture.Disabled := False;
+  sfPlanet.Material.Texture.Disabled := False;
   RadioGroupPlanetClick(Self);
 
   rgConstLinesClick(Self);
@@ -216,7 +210,7 @@ end;
 procedure TdFormViewer.GLCadencerProgress(Sender: TObject;
   const DeltaTime, NewTime: Double);
 begin
-  //sphPlanet.TurnAngle := 10 * NewTime;
+  sfPlanet.TurnAngle := 10 * NewTime;
 end;
 
 //------------------------------------------------------------------
@@ -225,20 +219,68 @@ procedure TdFormViewer.RadioGroupPlanetClick(Sender: TObject);
 begin
   case RadioGroupPlanet.ItemIndex of
      0: begin
-          sphPlanet.Radius := 2440;
-          sphPlanet.Material.Texture.Image.LoadFromFile('mercury.jpg');
+          sfPlanet.Material.Texture.Image.LoadFromFile('mercury.jpg');
+          sfPlanet.Radius := 2440;
+          TorusMeridian.MajorRadius := 2440;
+          TorusEquator.MajorRadius := 2440;
+          TorusEcliptic.PitchAngle := -23.5;
         end;
      1: begin
-          sphPlanet.Radius := 6052;
-          sphPlanet.Material.Texture.Image.LoadFromFile('venus.jpg');
+          sfPlanet.Material.Texture.Image.LoadFromFile('venus.jpg');
+          sfPlanet.Radius := 6052;
+          TorusMeridian.MajorRadius := 6052;
+          TorusEquator.MajorRadius := 6052;
+          TorusEcliptic.PitchAngle := -23.5;
         end;
      2: begin
-          sphPlanet.Radius := 6371;
-          sphPlanet.Material.Texture.Image.LoadFromFile('earth.jpg');
+          sfPlanet.Material.Texture.Image.LoadFromFile('earth.jpg');
+          sfPlanet.Radius := 6371;
+          TorusMeridian.MajorRadius := 6371;
+          TorusEquator.MajorRadius := 6371;
+          // add Moon as child
         end;
      3: begin
-          sphPlanet.Radius := 3390;
-          sphPlanet.Material.Texture.Image.LoadFromFile('mars.jpg');
+          sfPlanet.Material.Texture.Image.LoadFromFile('mars.jpg');
+          sfPlanet.Radius := 3390;
+          TorusMeridian.MajorRadius := 3390;
+          TorusEquator.MajorRadius := 3390;
+        end;
+     4: begin
+          sfPlanet.Material.Texture.Image.LoadFromFile('jupiter.jpg');
+          sfPlanet.Radius := 10000; //
+          TorusMeridian.MajorRadius := 10000;
+          TorusEquator.MajorRadius := 10000;
+          // add Io, Europa, Callisto Ganimede as childs
+          //        Camera.ToTarget;
+        end;
+     5: begin
+          sfPlanet.Material.Texture.Image.LoadFromFile('saturn.jpg');
+          sfPlanet.Radius := 9500; //
+          TorusMeridian.MajorRadius := 9500;
+          TorusEquator.MajorRadius := 9500;
+          // add Titan and Enceladus as childs
+        end;
+     6: begin
+          sfPlanet.Material.Texture.Image.LoadFromFile('uranus.jpg');
+          sfPlanet.Radius := 7500; // 3390;
+          TorusMeridian.MajorRadius := 7500;
+          TorusEquator.MajorRadius := 7500;
+          TorusEcliptic.PitchAngle := -28.3;
+        end;
+     7: begin
+          sfPlanet.Material.Texture.Image.LoadFromFile('neptune.jpg');
+          sfPlanet.Radius := 8000; //24622;
+          TorusMeridian.MajorRadius := 8000; //24622;
+          TorusEquator.MajorRadius := 8000; // 24622;
+        end;
+     8: begin
+          sfPlanet.Material.Texture.Image.LoadFromFile('pluto.jpg');
+//          ffPlanet.Material.Texture.Image.LoadFromFile('charon.jpg');
+          sfPlanet.Radius := 2377;
+          TorusMeridian.MajorRadius := 2377;
+          TorusEquator.MajorRadius := 2377;
+          TorusEcliptic.PitchAngle := -119.3;
+          // add Charon as child
         end;
   end;
 end;
@@ -252,7 +294,7 @@ begin
   ConstBorders.Nodes.Clear;
   case rgConstLines.ItemIndex of
     0: begin
-         SkyDome.Bands.Clear;
+         SkyDome.ClearStructureChanged;
        end;
     1: begin
          LoadConstLines(CurrDir);
@@ -261,6 +303,44 @@ begin
          LoadConstBorders(CurrDir);
        end;
   end;
+end;
+
+procedure TdFormViewer.miCoordinatesClick(Sender: TObject);
+begin
+  with TFormCoords.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TdFormViewer.miPointtoClick(Sender: TObject);
+begin
+  with TFormPointto.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TdFormViewer.About1Click(Sender: TObject);
+begin
+  //
+  with TFormAbout.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+
+
+end;
+
+procedure TdFormViewer.Exit1Click(Sender: TObject);
+begin
+  Exit;
 end;
 
 end.

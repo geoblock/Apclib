@@ -12,6 +12,7 @@ object FormViewerC: TFormViewerC
   Font.Style = []
   Menu = MainMenu
   Position = poScreenCenter
+  OnCreate = FormCreate
   TextHeight = 15
   object GLSceneViewer: TGLSceneViewer
     Left = 185
@@ -50,30 +51,23 @@ object FormViewerC: TFormViewerC
     end
     object RadioGroupPlanet: TRadioGroup
       Left = 16
-      Top = 32
+      Top = 16
       Width = 145
-      Height = 121
+      Height = 242
       Caption = 'Planet'
       ItemIndex = 2
       Items.Strings = (
         'Mercury'
         'Venus'
         'Earth'
-        'Mars')
+        'Mars'
+        'Jupiter'
+        'Saturn'
+        'Uranus'
+        'Neptune'
+        'Pluto')
       TabOrder = 1
-    end
-    object RadioGroupForm: TRadioGroup
-      Left = 16
-      Top = 199
-      Width = 145
-      Height = 113
-      Caption = 'Form'
-      ItemIndex = 0
-      Items.Strings = (
-        'Sphere'
-        'Freeform'
-        'Ellipsoid')
-      TabOrder = 2
+      OnClick = RadioGroupPlanetClick
     end
   end
   object PanelLeft: TPanel
@@ -111,6 +105,7 @@ object FormViewerC: TFormViewerC
   end
   object GLCadencer: TGLCadencer
     Scene = GLScene
+    OnProgress = GLCadencerProgress
     Left = 160
     Top = 210
   end
@@ -152,20 +147,12 @@ object FormViewerC: TFormViewerC
       object SaveAs1: TMenuItem
         Caption = 'Save &As...'
       end
-      object N2: TMenuItem
-        Caption = '-'
-      end
-      object Print1: TMenuItem
-        Caption = '&Print...'
-      end
-      object PrintSetup1: TMenuItem
-        Caption = 'P&rint Setup...'
-      end
       object N1: TMenuItem
         Caption = '-'
       end
-      object Exit1: TMenuItem
+      object miExit: TMenuItem
         Caption = 'E&xit'
+        OnClick = miExitClick
       end
     end
     object Edit1: TMenuItem
@@ -173,9 +160,6 @@ object FormViewerC: TFormViewerC
       object Undo1: TMenuItem
         Caption = '&Undo'
         ShortCut = 16474
-      end
-      object Repeat1: TMenuItem
-        Caption = '&Repeat <command>'
       end
       object N5: TMenuItem
         Caption = '-'
@@ -218,18 +202,10 @@ object FormViewerC: TFormViewerC
       end
     end
     object Window1: TMenuItem
-      Caption = '&Window'
-      object NewWindow1: TMenuItem
-        Caption = '&New Window'
-      end
-      object Tile1: TMenuItem
-        Caption = '&Tile'
-      end
-      object Cascade1: TMenuItem
-        Caption = '&Cascade'
-      end
-      object ArrangeAll1: TMenuItem
-        Caption = '&Arrange All'
+      Caption = '&View'
+      object miPointto: TMenuItem
+        Caption = '&Pointto...'
+        OnClick = miPointtoClick
       end
       object N6: TMenuItem
         Caption = '-'
@@ -247,13 +223,14 @@ object FormViewerC: TFormViewerC
         Caption = '&Contents'
       end
       object SearchforHelpOn1: TMenuItem
-        Caption = '&Search for Help On...'
+        Caption = '&Search in Wiki...'
       end
-      object HowtoUseHelp1: TMenuItem
-        Caption = '&How to Use Help'
+      object N7: TMenuItem
+        Caption = '-'
       end
-      object About1: TMenuItem
+      object miAbout: TMenuItem
         Caption = '&About...'
+        OnClick = miAboutClick
       end
     end
   end
@@ -275,6 +252,41 @@ object FormViewerC: TFormViewerC
         end>
       Stars = <>
     end
+    object sfPlanet: TGLSphere
+      Radius = 6371.000000000000000000
+      Slices = 128
+      Stacks = 128
+      object TorusMeridian: TGLTorus
+        Material.FrontProperties.Ambient.Color = {00000000000000000000803F0000803F}
+        Material.FrontProperties.Diffuse.Color = {00000000000000000000803F0000803F}
+        Material.FrontProperties.Emission.Color = {00000000000000000000803F0000803F}
+        Direction.Coordinates = {0000803F000000002EBD3BB300000000}
+        TurnAngle = 90.000000000000000000
+        MajorRadius = 6371.000000000000000000
+        MinorRadius = 100.000000000000000000
+        Rings = 256
+        StopAngle = 360.000000000000000000
+        Parts = [toSides, toStartDisk, toStopDisk]
+      end
+      object TorusEquator: TGLTorus
+        Material.FrontProperties.Ambient.Color = {0000803F00000000000000000000803F}
+        Material.FrontProperties.Diffuse.Color = {0000803F00000000000000000000803F}
+        Material.FrontProperties.Emission.Color = {0000803F00000000000000000000803F}
+        Direction.Coordinates = {3A69BCB3000080BF7719C1A500000000}
+        Up.Coordinates = {BBF46E3201F03B190000803F00000000}
+        MajorRadius = 6371.000000000000000000
+        MinorRadius = 100.000000000000000000
+        Rings = 256
+        StopAngle = 360.000000000000000000
+        Parts = [toSides, toStartDisk, toStopDisk]
+      end
+    end
+    object DummyCube: TGLDummyCube
+      CubeSize = 20000.000000000000000000
+      VisibleAtRunTime = True
+      object ffPlanet: TGLFreeForm
+      end
+    end
     object Camera: TGLCamera
       DepthOfView = 100000.000000000000000000
       FocalLength = 50.000000000000000000
@@ -290,16 +302,9 @@ object FormViewerC: TFormViewerC
         end
       end
     end
-    object DummyCube: TGLDummyCube
-      CubeSize = 20000.000000000000000000
-      VisibleAtRunTime = True
-      object sphPlanet: TGLSphere
-        Radius = 6371.000000000000000000
-        Slices = 128
-        Stacks = 128
-      end
-      object ffPlanet: TGLFreeForm
-      end
+    object CameraController: TGLCamera
+      DepthOfView = 100.000000000000000000
+      FocalLength = 50.000000000000000000
     end
   end
   object Timer: TTimer
