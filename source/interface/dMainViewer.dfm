@@ -137,8 +137,12 @@ object dFormViewer: TdFormViewer
       end>
   end
   object GLScene: TGLScene
-    Left = 203
-    Top = 67
+    Left = 198
+    Top = 28
+    object SkyBox: TGLSkyBox
+      CloudsPlaneOffset = 0.200000002980232200
+      CloudsPlaneSize = 32.000000000000000000
+    end
     object SkyDome: TGLSkyDome
       Up.Coordinates = {0000803F000000000000000000000000}
       Visible = False
@@ -344,8 +348,8 @@ object dFormViewer: TdFormViewer
     end
     object miTools: TMenuItem
       Caption = '&Tools'
-      object miOptions: TMenuItem
-        Caption = '&Options...'
+      object miSettings: TMenuItem
+        Caption = '&Settings...'
       end
       object ArrangeAll1: TMenuItem
         Caption = '&Arrange All'
@@ -384,8 +388,8 @@ object dFormViewer: TdFormViewer
   object GLCadencer: TGLCadencer
     Scene = GLScene
     OnProgress = GLCadencerProgress
-    Left = 264
-    Top = 162
+    Left = 282
+    Top = 27
   end
   object GLSimpleNavigation: TGLSimpleNavigation
     Form = Owner
@@ -406,5 +410,9 @@ object dFormViewer: TdFormViewer
       end>
     Left = 414
     Top = 80
+  end
+  object GLMatLib: TGLMaterialLibrary
+    Left = 200
+    Top = 136
   end
 end

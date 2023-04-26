@@ -15,6 +15,12 @@
         <Projects Include="source\sofa\sofa_win64.cbproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="source\astronomy\astronomy_win32.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="source\astronomy\astronomy_win64.cbproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +65,32 @@
     <Target Name="sofa_win64:Make">
         <MSBuild Projects="source\sofa\sofa_win64.cbproj" Targets="Make"/>
     </Target>
+    <Target Name="astronomy_win32">
+        <MSBuild Projects="source\astronomy\astronomy_win32.cbproj"/>
+    </Target>
+    <Target Name="astronomy_win32:Clean">
+        <MSBuild Projects="source\astronomy\astronomy_win32.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="astronomy_win32:Make">
+        <MSBuild Projects="source\astronomy\astronomy_win32.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="astronomy_win64">
+        <MSBuild Projects="source\astronomy\astronomy_win64.cbproj"/>
+    </Target>
+    <Target Name="astronomy_win64:Clean">
+        <MSBuild Projects="source\astronomy\astronomy_win64.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="astronomy_win64:Make">
+        <MSBuild Projects="source\astronomy\astronomy_win64.cbproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ApsViewer;ApcViewer;sofa_win32;sofa_win64"/>
+        <CallTarget Targets="ApsViewer;ApcViewer;sofa_win32;sofa_win64;astronomy_win32;astronomy_win64"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ApsViewer:Clean;ApcViewer:Clean;sofa_win32:Clean;sofa_win64:Clean"/>
+        <CallTarget Targets="ApsViewer:Clean;ApcViewer:Clean;sofa_win32:Clean;sofa_win64:Clean;astronomy_win32:Clean;astronomy_win64:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ApsViewer:Make;ApcViewer:Make;sofa_win32:Make;sofa_win64:Make"/>
+        <CallTarget Targets="ApsViewer:Make;ApcViewer:Make;sofa_win32:Make;sofa_win64:Make;astronomy_win32:Make;astronomy_win64:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

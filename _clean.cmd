@@ -16,6 +16,7 @@ del *.hpp /s
 del *.bpi /s
 del *.lib /s
 del *.a /s
+del *.d /s
 del *.obj /s
 
 @echo off delete debug files

@@ -34,7 +34,7 @@ uses
 
   dAbout,
   dCoords,
-  dPointto;
+  dPointto, GLS.Material;
 
 type
   TdFormViewer = class(TForm)
@@ -65,7 +65,7 @@ type
     N4: TMenuItem;
     N5: TMenuItem;
     miTools: TMenuItem;
-    miOptions: TMenuItem;
+    miSettings: TMenuItem;
     ArrangeAll1: TMenuItem;
     Hide1: TMenuItem;
     Show1: TMenuItem;
@@ -103,6 +103,8 @@ type
     miPointto: TMenuItem;
     miCoordinates: TMenuItem;
     CameraController: TGLCamera;
+    SkyBox: TGLSkyBox;
+    GLMatLib: TGLMaterialLibrary;
     procedure FormCreate(Sender: TObject);
     procedure RadioGroupPlanetClick(Sender: TObject);
     procedure GLCadencerProgress(Sender: TObject; const DeltaTime, NewTime: Double);
@@ -340,7 +342,7 @@ end;
 
 procedure TdFormViewer.Exit1Click(Sender: TObject);
 begin
-  Exit;
+  Close;
 end;
 
 end.

@@ -32,12 +32,13 @@
 interface
 
 const
-  {$IF Defined(WIN32)}
-  LIB_ASTRONOMY = 'astronomy.dll';
-  _PU = '';
+  {$IFDEF WIN32}
+    LIB_ASTRONOMY = 'astronomy_win32.dll';
   {$ELSE}
-    {$MESSAGE Error 'Unsupported platform'}
+    LIB_ASTRONOMY = 'astronomy_win64.dll';
   {$ENDIF}
+    //otherwise {$MESSAGE Error 'Unsupported platform'}
+   _PU = '';
 
 const
   // The speed of light in AU/day.
